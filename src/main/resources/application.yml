@@ -2,7 +2,6 @@ server:
   port: 8087
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/dragon
-#    url: jdbc:postgresql://ec2-52-78-73-203.ap-northeast-2.compute.amazonaws.com:5432/dragon
+    url: jdbc:postgresql://localhost:5432/diary
     username: csw
     password: sksnzm62
