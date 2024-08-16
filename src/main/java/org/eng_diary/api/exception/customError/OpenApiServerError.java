@@ -5,4 +5,8 @@ public class OpenApiServerError extends RuntimeException {
         super(message);
     }
 
+    public OpenApiServerError(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }
