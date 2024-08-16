@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/word")
 @RequiredArgsConstructor
@@ -24,12 +27,16 @@ public class WordController {
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    @GetMapping("/{word}")
-    public ResponseEntity<ApiResponse<WordBasicInfo>> findWord(@PathVariable("word") String word) {
-        System.out.println("헬로우 -> " + word);
-        WordBasicInfo result = wordService.createWordInfo(word);
+    @GetMapping("/test/multiple")
+    public ResponseEntity<ApiResponse<List<MemberResponse>>> testMultipleData() {
+        List<MemberResponse> memberResponses = wordService.testMultipleData();
+        return ResponseEntity.ok(ApiResponse.success(memberResponses));
+    }
 
-        return ResponseEntity.ok(ApiResponse.success(result));
+    @GetMapping("/{word}")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> findWord(@PathVariable("word") String word) {
+        List<Map<String, Object>> wordInfo = wordService.createWordInfo(word);
+        return ResponseEntity.ok(ApiResponse.success(wordInfo));
     }
 
 }

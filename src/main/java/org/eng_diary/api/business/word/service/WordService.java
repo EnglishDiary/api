@@ -1,9 +1,12 @@
 package org.eng_diary.api.business.word.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eng_diary.api.business.word.dto.MemberResponse;
 import org.eng_diary.api.business.word.repository.WordRepository;
 import org.eng_diary.api.domain.Member;
-import org.eng_diary.api.dto.WordBasicInfo;
+import org.eng_diary.api.domain.WordOriginalData;
 import org.eng_diary.api.exception.customError.BadRequestError;
 import org.eng_diary.api.exception.customError.OpenApiServerError;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -63,75 +66,52 @@ public class WordService {
      * @param word
      * @return
      */
-    public WordBasicInfo createWordInfo(String word) {
+    @Transactional
+    public List<Map<String, Object>> createWordInfo(String word) {
+        ObjectMapper objectMapper = new ObjectMapper();
         String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word;
+
+        WordOriginalData existedWord = wordRepository.findExistedWord(word);
+        if (existedWord != null) {
+            String jsonData = existedWord.getJsonString();
+            return convertJsonToList(jsonData);
+        }
 
         try {
             ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
                     apiUrl,
                     HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+                    new ParameterizedTypeReference<>() {
+                    }
             );
-            List<Map<String, Object>> responseList = response.getBody();
-            Map<String, Object> wordDetail = responseList.get(0);
 
-            WordBasicInfo wordBasicInfo = new WordBasicInfo();
+            List<Map<String, Object>> responseBody = response.getBody();
 
-            String title = (String) wordDetail.get("word");
-            String phonetic = (String) wordDetail.get("phonetic");
-            List<Map<String, Object>> phonetics = (List<Map<String, Object>>) wordDetail.get("phonetics");
-            List<Map<String, Object>> meanings = (List<Map<String, Object>>) wordDetail.get("meanings");
+            String jsonString = objectMapper.writeValueAsString(responseBody);
+            wordRepository.saveOriginalData(word, jsonString);
 
-            wordBasicInfo.setTitle(title);
-            wordBasicInfo.setPhonetic(phonetic);
-
-            int index = 0;
-            ArrayList<WordBasicInfo.Phonetic> wpList = new ArrayList<>();
-            for (Map<String, Object> item : phonetics) {
-                String audio = (String) item.get("audio");
-                if (audio.equals("")) {
-                    continue;
-                }
-
-                String country = countries[index];
-
-                WordBasicInfo.Phonetic wp = new WordBasicInfo.Phonetic(country, audio);
-                wpList.add(wp);
-
-                index++;
-            }
-
-            wordBasicInfo.setSounds(wpList);
-
-            ArrayList<WordBasicInfo.Meaning> meaningList = new ArrayList<>();
-
-            for (Map<String, Object> meaning : meanings) {
-                ArrayList<WordBasicInfo.Definitions> definitionList = new ArrayList<>();
-
-                String partOfSpeech = (String) meaning.get("partOfSpeech");
-
-                List<Map<String, Object>> definitions = (List<Map<String, Object>>) meaning.get("definitions");
-                for (Map<String, Object> definition : definitions) {
-                    String def = (String) definition.get("definition");
-                    String example = (String) definition.get("example");
-
-                    definitionList.add(new WordBasicInfo.Definitions(def, example));
-                }
-
-                meaningList.add(new WordBasicInfo.Meaning(partOfSpeech, definitionList, null, null));
-            }
-
-            wordBasicInfo.setMeanings(meaningList);
-            
-            return wordBasicInfo;
+            return response.getBody();
 
         } catch (HttpClientErrorException e) {
-            throw new BadRequestError("클로드한테 물어보고 적절히 예외처리 후 응답데이터 return 하기");
+            throw new BadRequestError("GPT한테 물어보고 적절히 예외처리 후 응답데이터 return 하기", e);
         } catch (HttpServerErrorException e) {
-            throw new OpenApiServerError("open api 서버에 문제가 생겼음");
+            throw new OpenApiServerError("open api 서버에 문제가 생겼음", e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON 변환 중 오류 발생", e);
         }
 
     }
+
+    public List<Map<String, Object>> convertJsonToList(String jsonString) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            return objectMapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON 파싱 중 오류 발생", e);
+        }
+    }
+
 
 }
