@@ -25,6 +25,7 @@ import java.util.Map;
 public class WordService {
     private final WordRepository wordRepository;
     private final RestTemplate restTemplate;
+    private final String[] countries = {"uk", "us"};
 
     // TODO 240815 RestTemplateBuilder bean 생성
     public WordService(WordRepository wordRepository, RestTemplateBuilder restTemplateBuilder) {
@@ -77,13 +78,52 @@ public class WordService {
 
             WordBasicInfo wordBasicInfo = new WordBasicInfo();
 
+            String title = (String) wordDetail.get("word");
             String phonetic = (String) wordDetail.get("phonetic");
             List<Map<String, Object>> phonetics = (List<Map<String, Object>>) wordDetail.get("phonetics");
-            Map<String, Object> phoneticMap = phonetics.get(0);
+            List<Map<String, Object>> meanings = (List<Map<String, Object>>) wordDetail.get("meanings");
 
+            wordBasicInfo.setTitle(title);
             wordBasicInfo.setPhonetic(phonetic);
-            wordBasicInfo.setEtc("기타 등등 ..");
 
+            int index = 0;
+            ArrayList<WordBasicInfo.Phonetic> wpList = new ArrayList<>();
+            for (Map<String, Object> item : phonetics) {
+                String audio = (String) item.get("audio");
+                if (audio.equals("")) {
+                    continue;
+                }
+
+                String country = countries[index];
+
+                WordBasicInfo.Phonetic wp = new WordBasicInfo.Phonetic(country, audio);
+                wpList.add(wp);
+
+                index++;
+            }
+
+            wordBasicInfo.setSounds(wpList);
+
+            ArrayList<WordBasicInfo.Meaning> meaningList = new ArrayList<>();
+
+            for (Map<String, Object> meaning : meanings) {
+                ArrayList<WordBasicInfo.Definitions> definitionList = new ArrayList<>();
+
+                String partOfSpeech = (String) meaning.get("partOfSpeech");
+
+                List<Map<String, Object>> definitions = (List<Map<String, Object>>) meaning.get("definitions");
+                for (Map<String, Object> definition : definitions) {
+                    String def = (String) definition.get("definition");
+                    String example = (String) definition.get("example");
+
+                    definitionList.add(new WordBasicInfo.Definitions(def, example));
+                }
+
+                meaningList.add(new WordBasicInfo.Meaning(partOfSpeech, definitionList, null, null));
+            }
+
+            wordBasicInfo.setMeanings(meaningList);
+            
             return wordBasicInfo;
 
         } catch (HttpClientErrorException e) {
