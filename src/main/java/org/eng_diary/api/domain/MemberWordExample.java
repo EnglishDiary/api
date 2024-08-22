@@ -7,16 +7,16 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Member {
-
+public class MemberWordExample {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "example_id")
     private Long id;
 
-    @Column(name = "member_name")
-    private String name;
+    private String example;
 
-    private String registrationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meaning_id")
+    private MemberWordMeaning meaning;
 
 }
