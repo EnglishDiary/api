@@ -4,12 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.word.dto.MemberResponse;
 import org.eng_diary.api.business.word.service.WordService;
 import org.eng_diary.api.dto.ApiResponse;
-import org.eng_diary.api.dto.WordBasicInfo;
+import org.eng_diary.api.dto.WordSaveRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +34,13 @@ public class WordController {
     public ResponseEntity<ApiResponse<List<Map<String, Object>>>> findWord(@PathVariable("word") String word) {
         List<Map<String, Object>> wordInfo = wordService.createWordInfo(word);
         return ResponseEntity.ok(ApiResponse.success(wordInfo));
+    }
+
+    @PostMapping("/save/{word}")
+    public ResponseEntity<ApiResponse<?>> saveWord(@PathVariable("word") String word, @RequestBody WordSaveRequest wordSaveRequest) {
+        wordService.saveWordInfo(word, wordSaveRequest.getJsonData());
+
+        return ResponseEntity.ok(ApiResponse.success("단어 업로드 성공", null));
     }
 
 }

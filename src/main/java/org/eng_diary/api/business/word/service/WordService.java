@@ -2,11 +2,11 @@ package org.eng_diary.api.business.word.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eng_diary.api.business.word.dto.MemberResponse;
 import org.eng_diary.api.business.word.repository.WordRepository;
-import org.eng_diary.api.domain.Member;
-import org.eng_diary.api.domain.WordOriginalData;
+import org.eng_diary.api.domain.*;
 import org.eng_diary.api.exception.customError.BadRequestError;
 import org.eng_diary.api.exception.customError.OpenApiServerError;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+// TODO 240822 체크예외 관련 로직은 유틸 클래스 메소드로 따로 뺀 뒤 거기서 try-catch 처리하기
 @Service
 @Transactional(readOnly = true)
 public class WordService {
@@ -113,5 +114,61 @@ public class WordService {
         }
     }
 
+    @Transactional
+    public void saveWordInfo(String word, String jsonData) {
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        // TODO: 언제 생성됐는지랑 수정됐는지 + 뜻하고 예문들 순서
+        try {
+            JsonNode wordData = objectMapper.readTree(jsonData);
+
+            MemberWord memberWord = new MemberWord();
+            Member member = new Member();
+            member.setId(1L);
+
+            memberWord.setWord(word);
+            memberWord.setMember(member);
+
+            wordRepository.saveMemberWord(memberWord);
+
+            JsonNode meanings = wordData.get("meanings");
+            for (JsonNode meaning: meanings) {
+                MemberWordKind kind = new MemberWordKind();
+                kind.setPartOfSpeech(meaning.get("partOfSpeech").asText());
+                kind.setMemberWord(memberWord);
+                wordRepository.saveMemberWordKind(kind);
+
+                JsonNode definitions = meaning.get("definitions");
+                for (JsonNode definition : definitions) {
+                    MemberWordMeaning wordMeaning = new MemberWordMeaning();
+                    wordMeaning.setDefinition(definition.get("definition").asText());
+                    wordMeaning.setKind(kind);
+                    wordRepository.saveMemberWordMeaning(wordMeaning);
+
+                    if (definition.has("example")) {
+                        MemberWordExample memberWordExample = new MemberWordExample();
+                        memberWordExample.setExample(definition.get("example").asText());
+                        memberWordExample.setMeaning(wordMeaning);
+                        wordRepository.saveMemberWordExample(memberWordExample);
+                    }
+
+                    if (definition.has("userExamples")) {
+                        JsonNode userExamples = definition.get("userExamples");
+                        for (JsonNode userExample : userExamples) {
+                            MemberWordExample example = new MemberWordExample();
+                            example.setExample(userExample.asText());
+                            example.setMeaning(wordMeaning);
+                            wordRepository.saveMemberWordExample(example);
+                        }
+                    }
+                }
+
+
+            }
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
