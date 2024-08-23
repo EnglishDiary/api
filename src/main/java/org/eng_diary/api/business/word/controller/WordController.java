@@ -1,12 +1,9 @@
 package org.eng_diary.api.business.word.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.eng_diary.api.business.word.dto.MemberResponse;
-import org.eng_diary.api.business.word.dto.WordDeleteRequest;
-import org.eng_diary.api.business.word.dto.WordUpdateRequest;
+import org.eng_diary.api.business.word.dto.*;
 import org.eng_diary.api.business.word.service.WordService;
 import org.eng_diary.api.dto.ApiResponse;
-import org.eng_diary.api.business.word.dto.WordSaveRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +45,7 @@ public class WordController {
 
     @GetMapping("/list")
     public ResponseEntity<ApiResponse<String>> getMemberWords() {
-        String jsonString = wordService.getMemberWords();
+        String jsonString = wordService.getMemberWords(0L); // TODO 240823 상수화
 
         return ResponseEntity.ok(ApiResponse.success(jsonString));
     }
@@ -66,5 +63,18 @@ public class WordController {
 
         return ResponseEntity.ok(ApiResponse.success("단어 업데이트 성공", null));
     }
+
+    @GetMapping("/category")
+    public ResponseEntity<ApiResponse<List<MemberWordCategoryResponse>>> getMemberCategories() {
+        return ResponseEntity.ok(ApiResponse.success(wordService.getMemberCategories()));
+    }
+
+    @GetMapping("/{categoryId}/list")
+    public ResponseEntity getMemberWordsByCategory(@PathVariable("categoryId") Long categoryId) {
+        String jsonString = wordService.getMemberWords(categoryId);
+
+        return ResponseEntity.ok(ApiResponse.success(jsonString));
+    }
+
 
 }

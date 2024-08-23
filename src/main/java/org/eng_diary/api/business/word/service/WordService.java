@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eng_diary.api.business.word.dto.MemberResponse;
+import org.eng_diary.api.business.word.dto.MemberWordCategoryResponse;
 import org.eng_diary.api.business.word.dto.WordUpdateRequest;
 import org.eng_diary.api.business.word.repository.WordRepository;
 import org.eng_diary.api.domain.*;
@@ -179,11 +180,18 @@ public class WordService {
 
     }
 
-    public String getMemberWords() {
+    public String getMemberWords(Long categoryId) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBuilder jsonBuilder = new JsonBuilder();
 
-        List<MemberWord> memberWords = wordRepository.findMemberWords(1L);
+
+        List<MemberWord> memberWords = new ArrayList<>();
+
+        if (categoryId == 0L) {
+            memberWords = wordRepository.findMemberWords(1L);
+        } else {
+            memberWords = wordRepository.findMemberWordsByCategory(1L, categoryId);
+        }
 
         ArrayNode wordList = objectMapper.createArrayNode();
 
@@ -248,4 +256,21 @@ public class WordService {
         deleteMemberWord(wordId);
         saveWordInfo(wordUpdateRequest.getWord(), jsonStr);
     }
+
+    public List<MemberWordCategoryResponse> getMemberCategories() {
+        List<MemberWordCategory> categories = wordRepository.findMemberCategories(1L);  // TODO 240823 멤버 아이디 하드코딩
+
+        ArrayList<MemberWordCategoryResponse> categoryList = new ArrayList<>();
+
+        for (MemberWordCategory item : categories) {
+            MemberWordCategoryResponse category = new MemberWordCategoryResponse();
+            category.setId(item.getId());
+            category.setName(item.getCategoryName());
+
+            categoryList.add(category);
+        }
+
+        return categoryList;
+    }
+
 }

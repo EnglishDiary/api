@@ -22,6 +22,11 @@ public class MemberWord {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_word_category_id")
+    private MemberWordCategory memberWordCategory;
+
     @OneToMany(mappedBy = "memberWord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberWordKind> kinds;
+
 }

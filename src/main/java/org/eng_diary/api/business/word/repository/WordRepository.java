@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.eng_diary.api.domain.QMember.member;
 import static org.eng_diary.api.domain.QMemberWord.memberWord;
+import static org.eng_diary.api.domain.QMemberWordCategory.memberWordCategory;
 import static org.eng_diary.api.domain.QMemberWordExample.memberWordExample;
 import static org.eng_diary.api.domain.QMemberWordKind.memberWordKind;
 import static org.eng_diary.api.domain.QMemberWordMeaning.memberWordMeaning;
@@ -94,5 +95,19 @@ public class WordRepository {
 
     public void deleteMemberWord(MemberWord memberWord) {
         em.remove(memberWord);
+    }
+
+    public List<MemberWordCategory> findMemberCategories(Long memberId) {
+        return queryFactory.selectFrom(memberWordCategory)
+                .where(memberWordCategory.categoryOwnerId.eq(memberId))
+                .fetch();
+    }
+
+    public List<MemberWord> findMemberWordsByCategory(Long memberId, Long categoryId) {
+        return queryFactory.selectFrom(memberWord)
+                .join(memberWord.kinds, memberWordKind).fetchJoin()
+                .where(memberWord.member.id.eq(memberId)
+                        .and(memberWord.memberWordCategory.id.eq(categoryId)))
+                .fetch();
     }
 }
