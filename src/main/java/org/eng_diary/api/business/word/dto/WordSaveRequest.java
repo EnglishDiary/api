@@ -1,4 +1,4 @@
-package org.eng_diary.api.dto;
+package org.eng_diary.api.business.word.dto;
 
 import lombok.Getter;
 
