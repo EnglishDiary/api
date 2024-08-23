@@ -2,9 +2,10 @@ package org.eng_diary.api.business.word.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.word.dto.MemberResponse;
+import org.eng_diary.api.business.word.dto.WordDeleteRequest;
 import org.eng_diary.api.business.word.service.WordService;
 import org.eng_diary.api.dto.ApiResponse;
-import org.eng_diary.api.dto.WordSaveRequest;
+import org.eng_diary.api.business.word.dto.WordSaveRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ public class WordController {
     public ResponseEntity<ApiResponse<?>> saveWord(@PathVariable("word") String word, @RequestBody WordSaveRequest wordSaveRequest) {
         wordService.saveWordInfo(word, wordSaveRequest.getJsonData());
 
+        // TODO 240823 ok말고 created 써보기
         return ResponseEntity.ok(ApiResponse.success("단어 업로드 성공", null));
     }
 
@@ -48,6 +50,13 @@ public class WordController {
         String jsonString = wordService.getMemberWords();
 
         return ResponseEntity.ok(ApiResponse.success(jsonString));
+    }
+
+    @DeleteMapping("/delete/{word}")
+    public ResponseEntity<ApiResponse<?>> deleteWord(@PathVariable("word") String word, @RequestBody WordDeleteRequest wordDeleteRequest) {
+        wordService.deleteMemberWord(wordDeleteRequest.getWordId());
+
+        return ResponseEntity.ok(ApiResponse.success("단어 삭제 성공", null));
     }
 
 }

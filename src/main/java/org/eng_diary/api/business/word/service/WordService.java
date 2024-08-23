@@ -122,7 +122,7 @@ public class WordService {
     public void saveWordInfo(String word, String jsonData) {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // TODO: 언제 생성됐는지랑 수정됐는지 + 뜻하고 예문들 순서
+        // TODO 240822 언제 생성됐는지랑 수정됐는지 + 뜻하고 예문들 순서
         try {
             JsonNode wordData = objectMapper.readTree(jsonData);
 
@@ -187,6 +187,7 @@ public class WordService {
         for (MemberWord word : memberWords) {
             ObjectNode wordObject = objectMapper.createObjectNode();
             wordObject.put("word", word.getWord());
+            wordObject.put("id", word.getId());
 
             ArrayNode meaningArray = objectMapper.createArrayNode();
             List<MemberWordKind> kinds = word.getKinds();
@@ -228,5 +229,11 @@ public class WordService {
 
         jsonBuilder.addArray("list", wordList);
         return jsonBuilder.buildAsString();
+    }
+
+    @Transactional
+    public void deleteMemberWord(Long wordId) {
+        MemberWord memberWord = wordRepository.findMemberWord(wordId, 1L);
+        wordRepository.deleteMemberWord(memberWord);
     }
 }

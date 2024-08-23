@@ -83,4 +83,16 @@ public class WordRepository {
                 .fetch();
 
     }
+
+    public MemberWord findMemberWord(Long wordId, Long memberId) {
+        return queryFactory.selectFrom(memberWord)
+                .where(memberWord.member.id.eq(memberId)
+                        .and(memberWord.id.eq(wordId)))
+                .fetchOne();
+
+    }
+
+    public void deleteMemberWord(MemberWord memberWord) {
+        em.remove(memberWord);
+    }
 }
