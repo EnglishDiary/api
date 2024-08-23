@@ -4,11 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eng_diary.api.business.word.dto.MemberResponse;
 import org.eng_diary.api.business.word.repository.WordRepository;
 import org.eng_diary.api.domain.*;
 import org.eng_diary.api.exception.customError.BadRequestError;
 import org.eng_diary.api.exception.customError.OpenApiServerError;
+import org.eng_diary.api.util.JsonBuilder;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -170,5 +173,46 @@ public class WordService {
             e.printStackTrace();
         }
 
+    }
+
+    public String getMemberWords() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonBuilder jsonBuilder = new JsonBuilder();
+
+        List<MemberWord> memberWords = wordRepository.findMemberWords(1L);
+
+        jsonBuilder.addField("word", memberWords.get(0).getWord());
+        ArrayNode meaningArray = objectMapper.createArrayNode();
+
+        for (MemberWord word : memberWords) {
+            List<MemberWordKind> kinds = word.getKinds();
+            for (MemberWordKind kind : kinds) {
+                ObjectNode kindNode = objectMapper.createObjectNode();
+                kindNode.put("partOfSpeech", kind.getPartOfSpeech());
+
+                ArrayNode definitionArray = objectMapper.createArrayNode();
+                List<MemberWordMeaning> meanings = wordRepository.findMeanings(kind);
+                for (MemberWordMeaning meaning : meanings) {
+                    ObjectNode meaningNode = objectMapper.createObjectNode();
+                    meaningNode.put("definition", meaning.getDefinition());
+
+                    ArrayNode examplesArray = objectMapper.createArrayNode();
+                    for (MemberWordExample example : meaning.getExamples()) {
+                        ObjectNode exampleNode = objectMapper.createObjectNode();
+                        exampleNode.put("example", example.getExample());
+                        examplesArray.add(exampleNode);
+                    }
+                    meaningNode.set("examples", examplesArray);
+                    definitionArray.add(meaningNode);
+                }
+                kindNode.set("definitions", definitionArray);
+                meaningArray.add(kindNode);
+            }
+
+        }
+
+        jsonBuilder.addArray("meanings", meaningArray);
+
+        return jsonBuilder.buildAsString();
     }
 }

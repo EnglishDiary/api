@@ -43,4 +43,11 @@ public class WordController {
         return ResponseEntity.ok(ApiResponse.success("단어 업로드 성공", null));
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<ApiResponse<String>> getMemberWords() {
+        String jsonString = wordService.getMemberWords();
+
+        return ResponseEntity.ok(ApiResponse.success(jsonString));
+    }
+
 }

@@ -5,7 +5,14 @@ import jakarta.persistence.EntityManager;
 import org.eng_diary.api.domain.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static org.eng_diary.api.domain.QMember.member;
+import static org.eng_diary.api.domain.QMemberWord.memberWord;
+import static org.eng_diary.api.domain.QMemberWordExample.memberWordExample;
+import static org.eng_diary.api.domain.QMemberWordKind.memberWordKind;
+import static org.eng_diary.api.domain.QMemberWordMeaning.memberWordMeaning;
+import static org.eng_diary.api.domain.QWordOriginalData.*;
 
 @Repository
 public class WordRepository {
@@ -41,8 +48,8 @@ public class WordRepository {
 
     public WordOriginalData findExistedWord(String word) {
 
-        return queryFactory.selectFrom(QWordOriginalData.wordOriginalData)
-                .where(QWordOriginalData.wordOriginalData.wordTitle.eq(word))
+        return queryFactory.selectFrom(wordOriginalData)
+                .where(wordOriginalData.wordTitle.eq(word))
                 .fetchFirst();
     }
 
@@ -60,5 +67,20 @@ public class WordRepository {
 
     public void saveMemberWordExample(MemberWordExample memberWordExample) {
         em.persist(memberWordExample);
+    }
+
+    public List<MemberWord> findMemberWords(Long memberId) {
+        return queryFactory.selectFrom(memberWord)
+                .join(memberWord.kinds, memberWordKind).fetchJoin()
+                .where(memberWord.member.id.eq(memberId))
+                .fetch();
+    }
+
+    public List<MemberWordMeaning> findMeanings(MemberWordKind kind) {
+        return queryFactory.selectFrom(memberWordMeaning)
+                .leftJoin(memberWordMeaning.examples, memberWordExample).fetchJoin()
+                .where(memberWordMeaning.kind.eq(kind))
+                .fetch();
+
     }
 }
