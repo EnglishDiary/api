@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,5 +21,8 @@ public class MemberWordMeaning {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kind_id")
     private MemberWordKind kind;
+
+    @OneToMany(mappedBy = "meaning")
+    private List<MemberWordExample> examples;
 
 }
