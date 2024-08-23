@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eng_diary.api.business.word.dto.MemberResponse;
+import org.eng_diary.api.business.word.dto.WordUpdateRequest;
 import org.eng_diary.api.business.word.repository.WordRepository;
 import org.eng_diary.api.domain.*;
 import org.eng_diary.api.exception.customError.BadRequestError;
@@ -153,6 +154,7 @@ public class WordService {
                         MemberWordExample memberWordExample = new MemberWordExample();
                         memberWordExample.setExample(definition.get("example").asText());
                         memberWordExample.setMeaning(wordMeaning);
+                        memberWordExample.setProvider("API");
                         wordRepository.saveMemberWordExample(memberWordExample);
                     }
 
@@ -162,6 +164,7 @@ public class WordService {
                             MemberWordExample example = new MemberWordExample();
                             example.setExample(userExample.asText());
                             example.setMeaning(wordMeaning);
+                            example.setProvider("USER");
                             wordRepository.saveMemberWordExample(example);
                         }
                     }
@@ -235,5 +238,14 @@ public class WordService {
     public void deleteMemberWord(Long wordId) {
         MemberWord memberWord = wordRepository.findMemberWord(wordId, 1L);
         wordRepository.deleteMemberWord(memberWord);
+    }
+
+    @Transactional
+    public void updateMemberWord(WordUpdateRequest wordUpdateRequest) {
+        Long wordId = wordUpdateRequest.getWordId();
+        String jsonStr = wordUpdateRequest.getJsonStr();
+
+        deleteMemberWord(wordId);
+        saveWordInfo(wordUpdateRequest.getWord(), jsonStr);
     }
 }

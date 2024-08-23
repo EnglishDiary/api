@@ -3,6 +3,7 @@ package org.eng_diary.api.business.word.controller;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.word.dto.MemberResponse;
 import org.eng_diary.api.business.word.dto.WordDeleteRequest;
+import org.eng_diary.api.business.word.dto.WordUpdateRequest;
 import org.eng_diary.api.business.word.service.WordService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.eng_diary.api.business.word.dto.WordSaveRequest;
@@ -53,10 +54,17 @@ public class WordController {
     }
 
     @DeleteMapping("/delete/{word}")
-    public ResponseEntity<ApiResponse<?>> deleteWord(@PathVariable("word") String word, @RequestBody WordDeleteRequest wordDeleteRequest) {
+    public ResponseEntity<ApiResponse<?>> deleteWord(@RequestBody WordDeleteRequest wordDeleteRequest) {
         wordService.deleteMemberWord(wordDeleteRequest.getWordId());
 
         return ResponseEntity.ok(ApiResponse.success("단어 삭제 성공", null));
+    }
+
+    @PostMapping("/update/{word}")
+    public ResponseEntity<ApiResponse<?>> updateWord(@RequestBody WordUpdateRequest wordUpdateRequest) {
+        wordService.updateMemberWord(wordUpdateRequest);
+
+        return ResponseEntity.ok(ApiResponse.success("단어 업데이트 성공", null));
     }
 
 }
