@@ -181,10 +181,13 @@ public class WordService {
 
         List<MemberWord> memberWords = wordRepository.findMemberWords(1L);
 
-        jsonBuilder.addField("word", memberWords.get(0).getWord());
-        ArrayNode meaningArray = objectMapper.createArrayNode();
+        ArrayNode wordList = objectMapper.createArrayNode();
 
         for (MemberWord word : memberWords) {
+            ObjectNode wordObject = objectMapper.createObjectNode();
+            wordObject.put("word", word.getWord());
+
+            ArrayNode meaningArray = objectMapper.createArrayNode();
             List<MemberWordKind> kinds = word.getKinds();
             for (MemberWordKind kind : kinds) {
                 ObjectNode kindNode = objectMapper.createObjectNode();
@@ -208,11 +211,11 @@ public class WordService {
                 kindNode.set("definitions", definitionArray);
                 meaningArray.add(kindNode);
             }
-
+            wordObject.set("meanings", meaningArray);
+            wordList.add(wordObject);
         }
 
-        jsonBuilder.addArray("meanings", meaningArray);
-
+        jsonBuilder.addArray("list", wordList);
         return jsonBuilder.buildAsString();
     }
 }
