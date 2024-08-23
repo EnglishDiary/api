@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -199,13 +200,23 @@ public class WordService {
                     ObjectNode meaningNode = objectMapper.createObjectNode();
                     meaningNode.put("definition", meaning.getDefinition());
 
-                    ArrayNode examplesArray = objectMapper.createArrayNode();
+                    ArrayNode userExampleArray = objectMapper.createArrayNode();
                     for (MemberWordExample example : meaning.getExamples()) {
-                        ObjectNode exampleNode = objectMapper.createObjectNode();
-                        exampleNode.put("example", example.getExample());
-                        examplesArray.add(exampleNode);
+                        String exampleSentence = example.getExample();
+                        String provider = example.getProvider();
+                        if (!StringUtils.hasText(exampleSentence)) {
+                            continue;
+                        }
+
+                        if (provider.equals("USER")) {
+                            userExampleArray.add(exampleSentence);
+                        }
+                        if (provider.equals("API")) {
+                            meaningNode.put("example", exampleSentence);
+                        }
                     }
-                    meaningNode.set("examples", examplesArray);
+
+                    meaningNode.set("userExamples", userExampleArray);
                     definitionArray.add(meaningNode);
                 }
                 kindNode.set("definitions", definitionArray);

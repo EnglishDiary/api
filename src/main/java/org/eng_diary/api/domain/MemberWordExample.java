@@ -19,4 +19,6 @@ public class MemberWordExample {
     @JoinColumn(name = "meaning_id")
     private MemberWordMeaning meaning;
 
+    private String provider;
+
 }
