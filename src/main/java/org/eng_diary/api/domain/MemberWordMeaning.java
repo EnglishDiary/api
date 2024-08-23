@@ -22,7 +22,7 @@ public class MemberWordMeaning {
     @JoinColumn(name = "kind_id")
     private MemberWordKind kind;
 
-    @OneToMany(mappedBy = "meaning")
+    @OneToMany(mappedBy = "meaning", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberWordExample> examples;
 
 }

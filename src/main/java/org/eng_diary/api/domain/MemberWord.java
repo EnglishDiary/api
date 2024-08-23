@@ -22,6 +22,6 @@ public class MemberWord {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "memberWord")
+    @OneToMany(mappedBy = "memberWord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberWordKind> kinds;
 }
