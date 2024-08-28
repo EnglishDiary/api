@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eng_diary.api.business.word.dto.MemberResponse;
 import org.eng_diary.api.business.word.dto.MemberWordCategoryResponse;
+import org.eng_diary.api.business.word.dto.WordSaveRequest;
 import org.eng_diary.api.business.word.dto.WordUpdateRequest;
 import org.eng_diary.api.business.word.repository.WordRepository;
 import org.eng_diary.api.domain.*;
@@ -28,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 // TODO 240822 체크예외 관련 로직은 유틸 클래스 메소드로 따로 뺀 뒤 거기서 try-catch 처리하기
 @Service
@@ -121,19 +123,26 @@ public class WordService {
     }
 
     @Transactional
-    public void saveWordInfo(String word, String jsonData) {
+    public void saveWordInfo(String word, WordSaveRequest wordSaveRequest) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         // TODO 240822 언제 생성됐는지랑 수정됐는지 + 뜻하고 예문들 순서
+        // TODO 240825 GSON으로 바꾸는 거 고민해보기. Array랑 Object 모두 JsonNode로 퉁쳐서 헷갈리는 거 같음 (https://velog.io/@back7418/Java-JSON%EC%9D%84-%ED%8C%8C%EC%8B%B1%ED%95%98%EB%8A%94-%EA%B0%80%EC%9E%A5-%EC%89%AC%EC%9A%B4-%EB%B0%A9%EB%B2%95)
         try {
-            JsonNode wordData = objectMapper.readTree(jsonData);
+            JsonNode wordData = objectMapper.readTree(wordSaveRequest.getJsonData());
 
             MemberWord memberWord = new MemberWord();
             Member member = new Member();
             member.setId(1L);
-
             memberWord.setWord(word);
             memberWord.setMember(member);
+            if (wordSaveRequest.getCategoryId() != null) {
+                MemberWordCategory memberWordCategory = new MemberWordCategory();
+                memberWordCategory.setId(wordSaveRequest.getCategoryId());
+
+                memberWord.setMemberWordCategory(memberWordCategory);
+            }
+
 
             wordRepository.saveMemberWord(memberWord);
 
@@ -184,9 +193,9 @@ public class WordService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBuilder jsonBuilder = new JsonBuilder();
 
+        List<MemberWord> memberWords;
 
-        List<MemberWord> memberWords = new ArrayList<>();
-
+        // TODO 240827 ALL을 0로 잡았는데, 그냥 널값으로 처리시키는 게 나을 듯
         if (categoryId == 0L) {
             memberWords = wordRepository.findMemberWords(1L);
         } else {
@@ -199,6 +208,9 @@ public class WordService {
             ObjectNode wordObject = objectMapper.createObjectNode();
             wordObject.put("word", word.getWord());
             wordObject.put("id", word.getId());
+            wordObject.put("categoryId", Optional.ofNullable(word.getMemberWordCategory())
+                    .map(MemberWordCategory::getId)
+                    .orElse(null));
 
             ArrayNode meaningArray = objectMapper.createArrayNode();
             List<MemberWordKind> kinds = word.getKinds();
@@ -251,10 +263,14 @@ public class WordService {
     @Transactional
     public void updateMemberWord(WordUpdateRequest wordUpdateRequest) {
         Long wordId = wordUpdateRequest.getWordId();
-        String jsonStr = wordUpdateRequest.getJsonStr();
 
         deleteMemberWord(wordId);
-        saveWordInfo(wordUpdateRequest.getWord(), jsonStr);
+
+        WordSaveRequest wordSaveRequest = new WordSaveRequest();
+        wordSaveRequest.setJsonData(wordUpdateRequest.getJsonStr());
+        wordSaveRequest.setCategoryId(wordUpdateRequest.getCategoryId());
+
+        saveWordInfo(wordUpdateRequest.getWord(), wordSaveRequest);
     }
 
     public List<MemberWordCategoryResponse> getMemberCategories() {

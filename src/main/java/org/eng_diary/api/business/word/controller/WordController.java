@@ -37,7 +37,7 @@ public class WordController {
 
     @PostMapping("/save/{word}")
     public ResponseEntity<ApiResponse<?>> saveWord(@PathVariable("word") String word, @RequestBody WordSaveRequest wordSaveRequest) {
-        wordService.saveWordInfo(word, wordSaveRequest.getJsonData());
+        wordService.saveWordInfo(word, wordSaveRequest);
 
         // TODO 240823 ok말고 created 써보기
         return ResponseEntity.ok(ApiResponse.success("단어 업로드 성공", null));
