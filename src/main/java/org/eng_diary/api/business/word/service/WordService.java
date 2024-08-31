@@ -26,6 +26,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +137,8 @@ public class WordService {
             member.setId(1L);
             memberWord.setWord(word);
             memberWord.setMember(member);
+            memberWord.setRegisterTime(wordSaveRequest.getRegisterTime());
+
             if (wordSaveRequest.getCategoryId() != null) {
                 MemberWordCategory memberWordCategory = new MemberWordCategory();
                 memberWordCategory.setId(wordSaveRequest.getCategoryId());
@@ -259,20 +262,24 @@ public class WordService {
     }
 
     @Transactional
-    public void deleteMemberWord(Long wordId) {
+    public LocalDateTime deleteMemberWord(Long wordId) {
         MemberWord memberWord = wordRepository.findMemberWord(wordId, 1L);
+        LocalDateTime registerTime = memberWord.getRegisterTime();
+
         wordRepository.deleteMemberWord(memberWord);
+        return registerTime;
     }
 
     @Transactional
     public void updateMemberWord(WordUpdateRequest wordUpdateRequest) {
         Long wordId = wordUpdateRequest.getWordId();
 
-        deleteMemberWord(wordId);
+        LocalDateTime originalRegisterTime = deleteMemberWord(wordId);
 
         WordSaveRequest wordSaveRequest = new WordSaveRequest();
         wordSaveRequest.setJsonData(wordUpdateRequest.getJsonStr());
         wordSaveRequest.setCategoryId(wordUpdateRequest.getCategoryId());
+        wordSaveRequest.setRegisterTime(originalRegisterTime);
 
         saveWordInfo(wordUpdateRequest.getWord(), wordSaveRequest);
     }
