@@ -22,6 +22,8 @@ public class MemberWordMeaning {
     @JoinColumn(name = "kind_id")
     private MemberWordKind kind;
 
+    private Integer orderNumber;
+
     @OneToMany(mappedBy = "meaning", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberWordExample> examples;
 

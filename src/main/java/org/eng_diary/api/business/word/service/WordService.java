@@ -154,10 +154,14 @@ public class WordService {
                 wordRepository.saveMemberWordKind(kind);
 
                 JsonNode definitions = meaning.get("definitions");
+                int orderNumber = 0;
                 for (JsonNode definition : definitions) {
+                    orderNumber++;
                     MemberWordMeaning wordMeaning = new MemberWordMeaning();
                     wordMeaning.setDefinition(definition.get("definition").asText());
                     wordMeaning.setKind(kind);
+                    wordMeaning.setOrderNumber(orderNumber);
+
                     wordRepository.saveMemberWordMeaning(wordMeaning);
 
                     if (definition.has("example")) {
