@@ -1,5 +1,7 @@
 package org.eng_diary.api.business.word.repository;
 
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.eng_diary.api.domain.*;
@@ -13,6 +15,7 @@ import static org.eng_diary.api.domain.QMemberWordCategory.memberWordCategory;
 import static org.eng_diary.api.domain.QMemberWordExample.memberWordExample;
 import static org.eng_diary.api.domain.QMemberWordKind.memberWordKind;
 import static org.eng_diary.api.domain.QMemberWordMeaning.memberWordMeaning;
+import static org.eng_diary.api.domain.QMemberWordPhonetic.memberWordPhonetic;
 import static org.eng_diary.api.domain.QWordOriginalData.*;
 
 @Repository
@@ -110,4 +113,12 @@ public class WordRepository {
                         .and(memberWord.memberWordCategory.id.eq(categoryId)))
                 .fetch();
     }
+
+    public List<WordOriginalData> findWordOriginalDataByMemberWords(List<String> memberWords) {
+        return queryFactory.selectFrom(wordOriginalData)
+                .where(wordOriginalData.wordTitle.in(memberWords))
+                .fetch();
+    }
+
+
 }

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // TODO 240822 체크예외 관련 로직은 유틸 클래스 메소드로 따로 뺀 뒤 거기서 try-catch 처리하기
 @Service
@@ -209,6 +210,9 @@ public class WordService {
             memberWords = wordRepository.findMemberWordsByCategory(1L, categoryId);
         }
 
+        List<String> wordTitles = memberWords.stream().map(MemberWord::getWord).collect(Collectors.toList());
+        List<WordOriginalData> originalWords = wordRepository.findWordOriginalDataByMemberWords(wordTitles);
+
         ArrayNode wordList = objectMapper.createArrayNode();
 
         for (MemberWord word : memberWords) {
@@ -218,6 +222,31 @@ public class WordService {
             wordObject.put("categoryId", Optional.ofNullable(word.getMemberWordCategory())
                     .map(MemberWordCategory::getId)
                     .orElse(null));
+
+            WordOriginalData wordOriginalData = findWordOriginalData(originalWords, word.getWord());
+            if (wordOriginalData != null) {
+                String jsonString = wordOriginalData.getJsonString();
+                try {
+                    JsonNode jsonData = objectMapper.readTree(jsonString);
+
+                    wordObject.put("phonetic", jsonData.get(0).get("phonetic") == null ? null : jsonData.get(0).get("phonetic").asText());
+                    JsonNode phonetics = jsonData.get(0).get("phonetics");
+                    ArrayNode phoneticList = objectMapper.createArrayNode();
+
+                    if (phonetics.isArray()) {
+                        for (JsonNode phoneticNode : phonetics) {
+                            ObjectNode node = objectMapper.createObjectNode();
+                            node.put("audio", phoneticNode.get("audio").asText());
+                            phoneticList.add(node);
+                        }
+                    }
+
+                    wordObject.set("phonetics", phoneticList);
+
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
 
             ArrayNode meaningArray = objectMapper.createArrayNode();
             List<MemberWordKind> kinds = word.getKinds();
@@ -298,6 +327,13 @@ public class WordService {
         }
 
         return categoryList;
+    }
+
+    private WordOriginalData findWordOriginalData(List<WordOriginalData> list, String targetWord) {
+        return list.stream()
+                .filter((item)-> item.getWordTitle().equals(targetWord))
+                .findFirst()
+                .orElse(null);
     }
 
 }
