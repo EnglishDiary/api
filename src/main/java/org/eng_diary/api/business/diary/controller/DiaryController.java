@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/diary")
 @RequiredArgsConstructor
@@ -16,9 +18,8 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping("/ai-correction")
-    public ResponseEntity<ApiResponse<String>> requestAICorrecion() {
-        String result = diaryService.requestAICorrection();
-        return ResponseEntity.ok(ApiResponse.success(result));
+    public ResponseEntity<ApiResponse<Map<String, String>>> requestAICorrecion() {
+        return ResponseEntity.ok(ApiResponse.success(diaryService.requestAICorrection()));
     }
 
 }
