@@ -70,7 +70,7 @@ public class WordController {
     }
 
     @GetMapping("/{categoryId}/list")
-    public ResponseEntity getMemberWordsByCategory(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<ApiResponse<String>> getMemberWords(@PathVariable("categoryId") Long categoryId) {
         String jsonString = wordService.getMemberWords(categoryId);
 
         return ResponseEntity.ok(ApiResponse.success(jsonString));

@@ -1,7 +1,5 @@
 package org.eng_diary.api.business.word.repository;
 
-import com.querydsl.core.types.EntityPath;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.eng_diary.api.domain.*;
@@ -26,7 +24,7 @@ public class WordRepository {
 
     public WordRepository(EntityManager em) {
         this.em = em;
-        this.queryFactory = new JPAQueryFactory(em);
+        this.queryFactory = new JPAQueryFactory(em);    // TODO 240906 queryFactory도 빈등록으로 주입받을 수 있는지 알아보기
     }
 
     public Member findMember() {
