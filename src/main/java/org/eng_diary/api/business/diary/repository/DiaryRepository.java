@@ -2,7 +2,6 @@ package org.eng_diary.api.business.diary.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.eng_diary.api.business.diary.dto.DiaryDTO;
 import org.eng_diary.api.domain.Diary;
 import org.eng_diary.api.domain.OfficialDiaryCategory;
 import org.springframework.stereotype.Repository;

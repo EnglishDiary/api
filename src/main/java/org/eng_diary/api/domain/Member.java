@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +18,7 @@ public class Member {
     private String name;
 
     private String registrationId;
+
+    private String profileImageUrl;
 
 }
