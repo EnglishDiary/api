@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.eng_diary.api.business.word.dto.MemberResponse;
-import org.eng_diary.api.business.word.dto.MemberWordCategoryResponse;
-import org.eng_diary.api.business.word.dto.WordSaveRequest;
-import org.eng_diary.api.business.word.dto.WordUpdateRequest;
+import org.eng_diary.api.business.word.dto.*;
 import org.eng_diary.api.business.word.repository.WordRepository;
 import org.eng_diary.api.domain.*;
 import org.eng_diary.api.exception.customError.BadRequestError;
@@ -198,7 +195,7 @@ public class WordService {
 
     }
 
-    public String getMemberWords(Long categoryId) {
+    public MemberWordDTO getMemberWords(Long categoryId) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBuilder jsonBuilder = new JsonBuilder();
 
@@ -288,7 +285,10 @@ public class WordService {
         }
 
         jsonBuilder.addArray("list", wordList);
-        return jsonBuilder.buildAsString();
+
+        MemberWordDTO wordDTO = new MemberWordDTO();
+        wordDTO.setJsonString(jsonBuilder.buildAsString());
+        return wordDTO;
     }
 
     @Transactional
