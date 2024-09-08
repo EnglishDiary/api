@@ -128,7 +128,7 @@ public class WordService {
     public void saveWordInfo(String word, WordSaveRequest wordSaveRequest) {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // TODO 240822 언제 생성됐는지랑 수정됐는지 + 뜻하고 예문들 순서
+        // TODO 240822 예문들 순서
         // TODO 240825 GSON으로 바꾸는 거 고민해보기. Array랑 Object 모두 JsonNode로 퉁쳐서 헷갈리는 거 같음 (https://velog.io/@back7418/Java-JSON%EC%9D%84-%ED%8C%8C%EC%8B%B1%ED%95%98%EB%8A%94-%EA%B0%80%EC%9E%A5-%EC%89%AC%EC%9A%B4-%EB%B0%A9%EB%B2%95)
         try {
             JsonNode wordData = objectMapper.readTree(wordSaveRequest.getJsonData());
@@ -138,7 +138,8 @@ public class WordService {
             member.setId(1L);
             memberWord.setWord(word);
             memberWord.setMember(member);
-            memberWord.setRegisterTime(wordSaveRequest.getRegisterTime());
+            memberWord.setRegisterTime(wordSaveRequest.getRegisterTime() == null ?  LocalDateTime.now(): wordSaveRequest.getRegisterTime());
+            memberWord.setUpdateTime(LocalDateTime.now());
 
             if (wordSaveRequest.getCategoryId() != null) {
                 MemberWordCategory memberWordCategory = new MemberWordCategory();
