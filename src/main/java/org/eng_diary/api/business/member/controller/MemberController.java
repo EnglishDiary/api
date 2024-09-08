@@ -21,13 +21,12 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Long>> signup(@RequestBody @Valid SignupRequest request) {
         Long memberId = memberService.signup(request);
-        return ApiResponse.test("회원가입 성공", memberId);
-//        return ResponseEntity.ok(ApiResponse.success("회원가입에 성공하였습니다.", memberId));
+        return ApiResponse.success("회원가입에 성공하였습니다", memberId);
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginRequest request) {
-
+        return null;
     }
 
 
