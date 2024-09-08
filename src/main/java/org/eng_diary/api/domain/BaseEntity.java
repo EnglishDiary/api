@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 public class BaseEntity {
 
-//    @CreatedDate
+    @CreatedDate
     private LocalDateTime registerTime;
 
     @LastModifiedDate

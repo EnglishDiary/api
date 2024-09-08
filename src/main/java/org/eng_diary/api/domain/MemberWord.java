@@ -3,13 +3,15 @@ package org.eng_diary.api.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class MemberWord extends BaseEntity {
+public class MemberWord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +30,9 @@ public class MemberWord extends BaseEntity {
 
     @OneToMany(mappedBy = "memberWord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberWordKind> kinds;
+
+    private LocalDateTime registerTime;
+
+    private LocalDateTime updateTime;
 
 }
