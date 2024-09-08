@@ -35,8 +35,25 @@ public class DiaryRepository {
 
     public List<Diary> findDiariesByCategory(Long categoryId) {
         return queryFactory.selectFrom(diary)
-                .where(diary.officialDiaryCategory.id.eq(categoryId))
+                .where(diary.officialDiaryCategory.id.eq(categoryId)
+                        .and(diary.isDiaryPublic.eq(true)))
                 .join(diary.member, member)
+                .orderBy(diary.registerTime.desc())
                 .fetch();
+    }
+
+    public List<Diary> findAllDiaries() {
+        return queryFactory.selectFrom(diary)
+                .where(diary.isDiaryPublic.eq(true))
+                .join(diary.member, member)
+                .orderBy(diary.registerTime.desc())
+                .fetch();
+    }
+
+    public Diary findDiary(Long diaryId) {
+        return queryFactory.selectFrom(diary)
+                .join(diary.member, member)
+                .where(diary.id.eq(diaryId))
+                .fetchOne();
     }
 }

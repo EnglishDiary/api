@@ -39,8 +39,13 @@ public class DiaryController {
     }
 
     @GetMapping("/official-category/{categoryId}/list")
-    public ResponseEntity<ApiResponse<?>> getDiaries(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<ApiResponse<List<DiaryDTO>>> getDiaries(@PathVariable("categoryId") Long categoryId) {
         return ResponseEntity.ok(ApiResponse.success(diaryService.getDiaries(categoryId)));
+    }
+
+    @GetMapping("/{diaryId}/detail")
+    public ResponseEntity<ApiResponse<?>> getDiaryDetail(@PathVariable("diaryId") Long diaryId) {
+        return ResponseEntity.ok(ApiResponse.success((diaryService.getDiaryDetail(diaryId))));
     }
 
 }

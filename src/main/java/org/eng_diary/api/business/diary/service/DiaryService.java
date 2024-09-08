@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.diary.dto.DiaryDTO;
+import org.eng_diary.api.business.diary.dto.DiaryDetailDTO;
 import org.eng_diary.api.business.diary.dto.DiarySaveRequest;
 import org.eng_diary.api.business.diary.dto.OfficialCategoryDTO;
 import org.eng_diary.api.business.diary.repository.DiaryRepository;
@@ -157,16 +158,56 @@ public class DiaryService {
     }
 
     public List<DiaryDTO> getDiaries(Long categoryId) {
-        List<Diary> diaries = diaryRepository.findDiariesByCategory(categoryId);
+
+        List<Diary> diaries;
+
+        if (categoryId.equals(0L)) {
+            diaries = diaryRepository.findAllDiaries();
+        } else {
+            diaries = diaryRepository.findDiariesByCategory (categoryId);
+        }
 
         return diaries.stream().map((diary) -> {
             DiaryDTO dto = new DiaryDTO();
+            dto.setId(diary.getId());
             dto.setTitle(diary.getTitle());
             dto.setContent(diary.getContent());
             dto.setRegisterTime(diary.getRegisterTime());
             dto.setMemberName(diary.getMember().getName());
-            dto.setMemberProfileUrl("");    // TODO 240906 프로필 url 구현 필요
+
+            // TODO 240906 하드코딩 내용들 구현 필요
+            dto.setMemberProfileUrl("https://assets.pokemon.com/assets/cms2/img/pokedex/full//001.png");
+            dto.setThumbnailUrl("https://occ-0-8407-2219.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeNzg-kMHhUBP4AmHnLsrPYzxKHVceLnkwtLhxZlDssj7KjhStloJR6px7EbquZ83uDcygnWkekxysvuNYVzLQ3GyBMRl2PpU7pO.jpg?r=db8");
+            dto.setLikes(0);
+            dto.setComments(0);
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public DiaryDetailDTO getDiaryDetail(Long diaryId) {
+        Diary diary = diaryRepository.findDiary(diaryId);
+
+        DiaryDetailDTO dto = new DiaryDetailDTO();
+
+        dto.setId(diary.getId());
+        dto.setTitle(diary.getTitle());
+        dto.setContent(diary.getContent());
+        dto.setMemberName(diary.getMember().getName());
+        dto.setRegisterTime(diary.getRegisterTime());
+
+        if (diary.isFeedbackPublic()) {
+            dto.setAiFeedback(diary.getAiFeedback());
+        }
+        if (diary.isRevisionPublic()) {
+            dto.setAiRevisedDiary(diary.getAiRevisedDiary());
+        }
+
+        // TODO 240908 하드코딩
+        dto.setComments(0);
+        dto.setLikes(0);
+        dto.setMemberProfileUrl("");
+        dto.setThumbnailUrl("");
+
+        return dto;
     }
 }
