@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Setter
 public class DiaryDTO {
 
+    private Long id;
+
     private String title;
 
     private String content;
@@ -18,5 +20,11 @@ public class DiaryDTO {
     private String memberName;
 
     private String memberProfileUrl;
+
+    private String thumbnailUrl;
+
+    private Integer likes;
+
+    private Integer comments;
 
 }
