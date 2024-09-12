@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.word.dto.*;
 import org.eng_diary.api.business.word.service.WordService;
 import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.security.CurrentUser;
+import org.eng_diary.api.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,41 +38,42 @@ public class WordController {
     }
 
     @PostMapping("/save/{word}")
-    public ResponseEntity<ApiResponse<?>> saveWord(@PathVariable("word") String word, @RequestBody WordSaveRequest wordSaveRequest) {
-        wordService.saveWordInfo(word, wordSaveRequest);
+    public ResponseEntity<ApiResponse<?>> saveWord(@CurrentUser UserPrincipal userPrincipal, @PathVariable("word") String word, @RequestBody WordSaveRequest wordSaveRequest) {
+        wordService.saveWordInfo(word, wordSaveRequest, userPrincipal.getId());
 
         return ApiResponse.success("단어 업로드 성공");
     }
 
     @DeleteMapping("/delete/{word}")
-    public ResponseEntity<ApiResponse<?>> deleteWord(@RequestBody WordDeleteRequest wordDeleteRequest) {
-        wordService.deleteMemberWord(wordDeleteRequest.getWordId());
+    public ResponseEntity<ApiResponse<?>> deleteWord(@CurrentUser UserPrincipal userPrincipal, @RequestBody WordDeleteRequest wordDeleteRequest) {
+        wordService.deleteMemberWord(wordDeleteRequest.getWordId(), userPrincipal.getId());
 
         return ApiResponse.success("단어 삭제 성공");
     }
 
     @PostMapping("/update/{word}")
-    public ResponseEntity<ApiResponse<?>> updateWord(@RequestBody WordUpdateRequest wordUpdateRequest) {
-        wordService.updateMemberWord(wordUpdateRequest);
+    public ResponseEntity<ApiResponse<?>> updateWord(@CurrentUser UserPrincipal userPrincipal, @RequestBody WordUpdateRequest wordUpdateRequest) {
+        wordService.updateMemberWord(wordUpdateRequest, userPrincipal.getId());
 
         return ApiResponse.success("단어 업데이트 성공");
     }
 
     @GetMapping("/category")
-    public ResponseEntity<ApiResponse<List<MemberWordCategoryResponse>>> getMemberCategories() {
-        return ApiResponse.success(wordService.getMemberCategories());
+    public ResponseEntity<ApiResponse<List<MemberWordCategoryResponse>>> getMemberCategories(@CurrentUser UserPrincipal userPrincipal) {
+        Long memberId = userPrincipal.getId();
+        return ApiResponse.success(wordService.getMemberCategories(memberId));
     }
 
     @GetMapping("/list")
-    public ResponseEntity<ApiResponse<MemberWordDTO>> getMemberWords() {
-        MemberWordDTO memberWords = wordService.getMemberWords(0L);// TODO 240823 0L(전체 카테고리) 상수화
+    public ResponseEntity<ApiResponse<MemberWordDTO>> getMemberWords(@CurrentUser UserPrincipal userPrincipal) {
+        MemberWordDTO memberWords = wordService.getMemberWords(0L, userPrincipal.getId());// TODO 240823 0L(전체 카테고리) 상수화
 
         return ApiResponse.success(memberWords);
     }
 
     @GetMapping("/{categoryId}/list")
-    public ResponseEntity<ApiResponse<MemberWordDTO>> getMemberWords(@PathVariable("categoryId") Long categoryId) {
-        MemberWordDTO memberWords = wordService.getMemberWords(categoryId);
+    public ResponseEntity<ApiResponse<MemberWordDTO>> getMemberWords(@CurrentUser UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId) {
+        MemberWordDTO memberWords = wordService.getMemberWords(categoryId, userPrincipal.getId());
 
         return ApiResponse.success(memberWords);
     }

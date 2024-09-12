@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.eng_diary.api.business.auth.model.User;
 import org.eng_diary.api.business.word.dto.*;
 import org.eng_diary.api.business.word.repository.WordRepository;
 import org.eng_diary.api.domain.*;
@@ -45,13 +46,13 @@ public class WordService {
     }
 
     public MemberResponse testService() {
-        Member member = wordRepository.findMember();
+        Member member = wordRepository.findMemberWithId1();
         Member member2 = wordRepository.findMember2();
 
         MemberResponse memberResponse = new MemberResponse();
         memberResponse.setId(member.getId());
         memberResponse.setName(member.getName());
-        memberResponse.setRegistrationId(member.getRegistrationId());
+        memberResponse.setRegistrationId(member.getEmail());
 
         return memberResponse;
     }
@@ -122,7 +123,7 @@ public class WordService {
     }
 
     @Transactional
-    public void saveWordInfo(String word, WordSaveRequest wordSaveRequest) {
+    public void saveWordInfo(String word, WordSaveRequest wordSaveRequest, Long memberId) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         // TODO 240822 예문들 순서
@@ -131,8 +132,8 @@ public class WordService {
             JsonNode wordData = objectMapper.readTree(wordSaveRequest.getJsonData());
 
             MemberWord memberWord = new MemberWord();
-            Member member = new Member();
-            member.setId(1L);
+            User member = new User();
+            member.setId(memberId);
             memberWord.setWord(word);
             memberWord.setMember(member);
             memberWord.setRegisterTime(wordSaveRequest.getRegisterTime() == null ?  LocalDateTime.now(): wordSaveRequest.getRegisterTime());
@@ -195,7 +196,7 @@ public class WordService {
 
     }
 
-    public MemberWordDTO getMemberWords(Long categoryId) {
+    public MemberWordDTO getMemberWords(Long categoryId, Long memberId) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBuilder jsonBuilder = new JsonBuilder();
 
@@ -203,9 +204,9 @@ public class WordService {
 
         // TODO 240827 ALL을 0로 잡았는데, 그냥 널값으로 처리시키는 게 나을 듯
         if (categoryId == 0L) {
-            memberWords = wordRepository.findMemberWords(1L);
+            memberWords = wordRepository.findMemberWords(memberId);
         } else {
-            memberWords = wordRepository.findMemberWordsByCategory(1L, categoryId);
+            memberWords = wordRepository.findMemberWordsByCategory(memberId, categoryId);
         }
 
         List<String> wordTitles = memberWords.stream().map(MemberWord::getWord).collect(Collectors.toList());
@@ -292,8 +293,8 @@ public class WordService {
     }
 
     @Transactional
-    public LocalDateTime deleteMemberWord(Long wordId) {
-        MemberWord memberWord = wordRepository.findMemberWord(wordId, 1L);
+    public LocalDateTime deleteMemberWord(Long wordId, Long memberId) {
+        MemberWord memberWord = wordRepository.findMemberWord(wordId, memberId);
         LocalDateTime registerTime = memberWord.getRegisterTime();
 
         wordRepository.deleteMemberWord(memberWord);
@@ -301,21 +302,21 @@ public class WordService {
     }
 
     @Transactional
-    public void updateMemberWord(WordUpdateRequest wordUpdateRequest) {
+    public void updateMemberWord(WordUpdateRequest wordUpdateRequest, Long memberId) {
         Long wordId = wordUpdateRequest.getWordId();
 
-        LocalDateTime originalRegisterTime = deleteMemberWord(wordId);
+        LocalDateTime originalRegisterTime = deleteMemberWord(wordId, memberId);
 
         WordSaveRequest wordSaveRequest = new WordSaveRequest();
         wordSaveRequest.setJsonData(wordUpdateRequest.getJsonStr());
         wordSaveRequest.setCategoryId(wordUpdateRequest.getCategoryId());
         wordSaveRequest.setRegisterTime(originalRegisterTime);
 
-        saveWordInfo(wordUpdateRequest.getWord(), wordSaveRequest);
+        saveWordInfo(wordUpdateRequest.getWord(), wordSaveRequest, memberId);
     }
 
-    public List<MemberWordCategoryResponse> getMemberCategories() {
-        List<MemberWordCategory> categories = wordRepository.findMemberCategories(1L);  // TODO 240823 멤버 아이디 하드코딩
+    public List<MemberWordCategoryResponse> getMemberCategories(Long memberId) {
+        List<MemberWordCategory> categories = wordRepository.findMemberCategories(memberId);
 
         ArrayList<MemberWordCategoryResponse> categoryList = new ArrayList<>();
 
