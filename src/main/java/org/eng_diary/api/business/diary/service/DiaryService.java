@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.eng_diary.api.business.auth.model.User;
 import org.eng_diary.api.business.diary.dto.DiaryDTO;
 import org.eng_diary.api.business.diary.dto.DiaryDetailDTO;
 import org.eng_diary.api.business.diary.dto.DiarySaveRequest;
@@ -50,16 +51,20 @@ public class DiaryService {
         headers.set("Authorization", "Bearer " + apiKey);
         headers.set("Content-Type", "application/json");
 
-        String userMessage = "Please correct this English diary and provide feedback in Korean:\n\n" + userDiary;
+        String userMessage = "Please convert this diary into English, correct it, and provide feedback in Korean:\n\n" + userDiary;
 
-        // ChatGPT에게 보낼 메시지 생성
         String systemMessage = """
-            You are an AI assistant that corrects English diaries. Please provide the corrected diary and feedback in HTML format. Use the following JSON format for your response:
+            You are an AI assistant that converts diaries into English, corrects them, and provides feedback. The input diary may be in Korean, English, or a mix of both. Please provide the corrected English diary and feedback in HTML format. Use the following JSON format for your response:
             {
               "revisedDiary": "<p>The corrected version of the diary in English in HTML format</p>",
-              "feedback": "<p>첨삭한 부분들에 대한 피드백을 한국어로 작성한 HTML 포맷</p>"
+              "feedback": "<p>일기 내용과 교정에 대한 피드백을 한국어로 작성한 HTML 포맷</p>"
             }
-            Ensure that your entire response is valid JSON.""";
+            Follow these steps:
+            1. If the input is not in English, translate it to English.
+            2. Correct and improve the English diary.
+            3. Provide feedback in Korean about the content and any corrections made.
+            Ensure that your entire response is valid JSON.
+        """;
 
         // 요청 바디 생성
         Map<String, Object> body = new HashMap<>();
@@ -127,11 +132,10 @@ public class DiaryService {
     }
 
     @Transactional
-    public void saveDiary(DiarySaveRequest diarySaveRequest) {
+    public void saveDiary(DiarySaveRequest diarySaveRequest, Long memberId) {
 
-        // TODO 240906 멤버 하드코딩 제거
-        Member member = new Member();
-        member.setId(1L);
+        User member = new User();
+        member.setId(memberId);
 
         // TODO 240906 프론트에서 카테고리 id 받은 거 db에 select 한 번 날려보긴 해야 함
         OfficialDiaryCategory officialDiaryCategory = new OfficialDiaryCategory();
@@ -175,8 +179,8 @@ public class DiaryService {
             dto.setRegisterTime(diary.getRegisterTime());
             dto.setMemberName(diary.getMember().getName());
 
-            // TODO 240906 하드코딩 내용들 구현 필요
-            dto.setMemberProfileUrl("https://assets.pokemon.com/assets/cms2/img/pokedex/full//001.png");
+            // TODO 240906 아래 하드코딩 내용들 구현 필요
+            dto.setMemberProfileUrl(diary.getMember().getImageUrl());
             dto.setThumbnailUrl("https://occ-0-8407-2219.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeNzg-kMHhUBP4AmHnLsrPYzxKHVceLnkwtLhxZlDssj7KjhStloJR6px7EbquZ83uDcygnWkekxysvuNYVzLQ3GyBMRl2PpU7pO.jpg?r=db8");
             dto.setLikes(0);
             dto.setComments(0);
@@ -205,7 +209,7 @@ public class DiaryService {
         // TODO 240908 하드코딩
         dto.setComments(0);
         dto.setLikes(0);
-        dto.setMemberProfileUrl("");
+        dto.setMemberProfileUrl(diary.getMember().getImageUrl());
         dto.setThumbnailUrl("");
 
         return dto;
