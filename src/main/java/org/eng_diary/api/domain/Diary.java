@@ -2,6 +2,7 @@ package org.eng_diary.api.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.eng_diary.api.business.auth.model.User;
 
 @Entity
 @Getter
@@ -33,7 +34,7 @@ public class Diary extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "official_diary_category_id")

@@ -3,6 +3,7 @@ package org.eng_diary.api.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.eng_diary.api.business.auth.model.User;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class MemberWord {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_word_category_id")

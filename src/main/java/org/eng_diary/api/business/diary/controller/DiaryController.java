@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.diary.dto.*;
 import org.eng_diary.api.business.diary.service.DiaryService;
 import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.security.CurrentUser;
+import org.eng_diary.api.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +32,8 @@ public class DiaryController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse<?>> saveDiary(@RequestBody DiarySaveRequest diarySaveRequest) {
-        diaryService.saveDiary(diarySaveRequest);
+    public ResponseEntity<ApiResponse<?>> saveDiary(@CurrentUser UserPrincipal userPrincipal, @RequestBody DiarySaveRequest diarySaveRequest) {
+        diaryService.saveDiary(diarySaveRequest, userPrincipal.getId());
         return ApiResponse.success("다이어리 업로드 성공");
     }
 

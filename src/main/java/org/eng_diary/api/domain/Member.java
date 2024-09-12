@@ -14,11 +14,14 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    private String password;
+
     @Column(name = "member_name")
     private String name;
 
-    private String registrationId;
+    private String email;
 
+    @Column(name = "profile_url")
     private String profileImageUrl;
 
 }

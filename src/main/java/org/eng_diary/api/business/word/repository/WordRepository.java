@@ -13,7 +13,6 @@ import static org.eng_diary.api.domain.QMemberWordCategory.memberWordCategory;
 import static org.eng_diary.api.domain.QMemberWordExample.memberWordExample;
 import static org.eng_diary.api.domain.QMemberWordKind.memberWordKind;
 import static org.eng_diary.api.domain.QMemberWordMeaning.memberWordMeaning;
-import static org.eng_diary.api.domain.QMemberWordPhonetic.memberWordPhonetic;
 import static org.eng_diary.api.domain.QWordOriginalData.*;
 
 @Repository
@@ -27,12 +26,11 @@ public class WordRepository {
         this.queryFactory = new JPAQueryFactory(em);    // TODO 240906 queryFactory도 빈등록으로 주입받을 수 있는지 알아보기
     }
 
-    public Member findMember() {
+    public Member findMemberWithId1() {
         return em.find(Member.class, 1L);
     }
 
     public Member findMember2() {
-
         return queryFactory.selectFrom(member)
                 .where(member.name.eq("최상욱"))
                 .where(member.id.eq(1L))
@@ -100,7 +98,7 @@ public class WordRepository {
 
     public List<MemberWordCategory> findMemberCategories(Long memberId) {
         return queryFactory.selectFrom(memberWordCategory)
-                .where(memberWordCategory.categoryOwnerId.eq(memberId))
+                .where(memberWordCategory.member.id.eq(memberId))
                 .fetch();
     }
 
