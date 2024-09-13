@@ -57,13 +57,13 @@ public class DiaryService {
             You are an AI assistant that converts diaries into English, corrects them, and provides feedback. The input diary may be in Korean, English, or a mix of both. Please provide the corrected English diary and feedback in HTML format. Use the following JSON format for your response:
             {
               "revisedDiary": "<p>The corrected version of the diary in English in HTML format</p>",
-              "feedback": "<p>일기 내용과 교정에 대한 피드백을 한국어로 작성한 HTML 포맷</p>"
+              "feedback": "<p>첨삭한 부분들에 대한 피드백을 한국어로 작성한 HTML 포맷</p>"
             }
             Follow these steps:
             1. If the input is not in English, translate it to English.
             2. Correct and improve the English diary.
-            3. Provide feedback in Korean about the content and any corrections made.
-            Ensure that your entire response is valid JSON.
+            3. Provide feedback in Korean about any corrections made.
+            Ensure that your entire response is valid JSON. 
         """;
 
         // 요청 바디 생성
