@@ -1,5 +1,6 @@
 package org.eng_diary.api.config;
 
+import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.security.CustomUserDetailsService;
 import org.eng_diary.api.security.RestAuthenticationEntryPoint;
 import org.eng_diary.api.security.TokenAuthenticationFilter;
@@ -7,7 +8,6 @@ import org.eng_diary.api.security.oauth2.CustomOAuth2UserService;
 import org.eng_diary.api.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import org.eng_diary.api.security.oauth2.OAuth2AuthenticationFailureHandler;
 import org.eng_diary.api.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,22 +28,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         prePostEnabled = true
 )
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-
-    @Autowired
-    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
-    @Autowired
-    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-
-    @Autowired
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
