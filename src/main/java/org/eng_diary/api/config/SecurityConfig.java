@@ -75,10 +75,11 @@ public class SecurityConfig {
                 .disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                // MEMO 240915 - 아래에서 permitAll 되지 않은 모든 엔드포인트들은 권한 체크 후 적정 권한 없을 시 RestAuthenticationEntryPoint 클래스에서 예외 핸들링 이루어짐
+                // "/api/**"를 permitAll로 했기 때문에 @PreAuthorize에서 걸렸을 때 RestAuthenticationEntryPoint로 가지 못함. 그래서 AuthErrorHandler 핸들러에서 처리되게끔 만들었음
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/",
-//                        "/api/**",
                         "/test",
                         "/file/image",
                         "/error",
@@ -91,7 +92,7 @@ public class SecurityConfig {
                         "/**.css",
                         "/**.js")
                 .permitAll()
-                .requestMatchers("/auth/**", "/oauth2/**")
+                .requestMatchers("/api/**", "/auth/**", "/oauth2/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
