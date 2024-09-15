@@ -11,7 +11,6 @@ import org.eng_diary.api.business.diary.dto.DiarySaveRequest;
 import org.eng_diary.api.business.diary.dto.OfficialCategoryDTO;
 import org.eng_diary.api.business.diary.repository.DiaryRepository;
 import org.eng_diary.api.domain.Diary;
-import org.eng_diary.api.domain.Member;
 import org.eng_diary.api.domain.OfficialDiaryCategory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -56,14 +55,14 @@ public class DiaryService {
         String systemMessage = """
             You are an AI assistant that converts diaries into English, corrects them, and provides feedback. The input diary may be in Korean, English, or a mix of both. Please provide the corrected English diary and feedback in HTML format. Use the following JSON format for your response:
             {
-              "revisedDiary": "<p>The corrected and improved version of the diary in English, ensuring natural flow and context-appropriate language, in HTML format</p>",
-              "feedback": "<p>피드백(문법적 오류 교정 및 더 자연스러운 표현으로의 개선)을 한국어로 작성한 HTML 포맷</p>"             
+              "revisedDiary": "The corrected and improved version of the diary in English, ensuring natural flow and context-appropriate language, in HTML format",
+              "feedback": "피드백(문법적 오류 교정 및 더 자연스러운 표현으로의 개선)을 한국어로 작성한 HTML 포맷"            
             }
             Follow these steps:
             1. If the input is not in English, translate it to English.
             2. Correct and improve the English diary, focusing not only on grammar but also on enhancing the overall flow and natural expression of ideas.
             3. Provide feedback in Korean about any corrections made, including both grammatical fixes and improvements in natural expression and context.
-            Ensure that your entire response is valid JSON. 
+            Ensure that your entire response is valid JSON above. 
         """;
 
         // 요청 바디 생성
