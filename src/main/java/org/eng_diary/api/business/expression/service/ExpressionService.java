@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.expression.payload.CompositionRequest;
+import org.eng_diary.api.business.expression.payload.ExpressionSaveRequest;
 import org.eng_diary.api.business.expression.repository.ExpressionRepository;
+import org.eng_diary.api.domain.Composition;
+import org.eng_diary.api.domain.Expression;
+import org.eng_diary.api.domain.Member;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -43,17 +47,18 @@ public class ExpressionService {
         headers.set("Content-Type", "application/json");
 
         String systemMessage = """
-            당신은 한국어를 영어로 번역하는 전문가입니다. 주어진 한국어 문장을 영어로 번역하여 3개의 영어 문장을 만들어야 합니다. 사용자가 영어 문장을 제공한 경우, 이를 첫 번째 번역으로 사용하고 개선하세요. 각 영어 문장에 대해 한국어로 다시 번역해야 합니다. 응답은 반드시 지정된 JSON 형식으로 제공해야 합니다. 번역시 다음 지침을 따르세요:
+            당신은 한국어를 영어로 번역하는 전문가입니다. 주어진 한국어 문장을 영어로 번역하여 3개의 영어 문장을 만들어야 합니다. 사용자가 영어 문장을 제공한 경우, 이를 첫 번째 번역으로 사용하고 개선하세요. 각 영어 문장에 대해 한국어로 다시 번역해야 합니다. 또한, 당신의 영작 과정과 결과에 대한 간단한 요약을 제공해야 합니다. 응답은 반드시 지정된 JSON 형식으로 제공해야 합니다. 번역시 다음 지침을 따르세요:
             1. 원래 의미를 정확히 전달하되, 자연스러운 영어 표현을 사용하세요.
             2. 문맥에 맞는 다양한 어휘와 문법 구조를 사용하세요.
             3. 사용자가 영어 문장을 제공한 경우, 이를 개선할 때는 문법 오류를 수정하고 더 자연스러운 표현으로 바꾸세요.
-            4. 한국어로 다시 번역할 때는 원래 한국어 문장과 완전히 같지 않아도 됩니다. 영어 문장의 뉘앙스를 잘 살려주세요.",
-            """;
+            4. 한국어로 다시 번역할 때는 원래 한국어 문장과 완전히 같지 않아도 됩니다. 영어 문장의 뉘앙스를 잘 살려주세요.
+            5. 요약에서는 번역 과정에서 고려한 주요 사항, 선택한 표현의 이유, 그리고 번역의 전반적인 특징을 간략히 설명하세요.
+        """;
 
         String userMessageTemplate = """
             다음 한국어 문장을 영어로 번역해주세요. 총 3개의 영어 문장과 각각의 한국어 번역을 JSON 형식으로 제공해주세요.
             한국어 문장: %s
-            %s
+            사용자 영어 문장: %s
         
             JSON 응답 형식:
             {
@@ -71,8 +76,9 @@ public class ExpressionService {
                   "english": "영어 번역 3",
                   "korean": "한국어 역번역 3"
                 }
-              ]
-            }    
+              ],
+              "translationSummary": "영작 과정과 결과에 대한 간단한 요약"
+            }
         """;
 
         String koreanSentence = request.getKoreanSentence();
@@ -114,6 +120,7 @@ public class ExpressionService {
 
             result.put("originalSentence", aiResponseMap.get("originalSentence"));
             result.put("translations", aiResponseMap.get("translations"));
+            result.put("summary", aiResponseMap.get("translationSummary"));
 
             // 사용량 정보 추가
             Map<String, Object> usage = (Map<String, Object>) parsedResponse.get("usage");
@@ -125,4 +132,26 @@ public class ExpressionService {
 
         return result;
     }
+
+    @Transactional
+    public void saveExpression(ExpressionSaveRequest request, Long memberId) {
+        Member member = new Member();
+        member.setId(memberId);
+
+        Expression expression = new Expression();
+        expression.setSummary(request.getSummary());
+        expression.setOriginalSentence(request.getOriginalSentence());
+        expression.setUserSentence(request.getUserSentence());
+        expression.setMember(member);
+        expressionRepository.saveExpression(expression);
+
+        for (ExpressionSaveRequest.Translation translation : request.getTranslations()) {
+            Composition composition = new Composition();
+            composition.setResultSentence(translation.getEnglish());
+            composition.setTranslation(translation.getKorean());
+            composition.setExpression(expression);
+            expressionRepository.saveComposition(composition);
+        }
+    }
+
 }
