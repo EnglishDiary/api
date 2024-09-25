@@ -7,13 +7,14 @@ import org.eng_diary.api.dto.ApiResponse;
 import org.eng_diary.api.security.CurrentUser;
 import org.eng_diary.api.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/word")
+@RequestMapping("/api/word")
 @RequiredArgsConstructor
 public class WordController {
 
@@ -38,6 +39,7 @@ public class WordController {
     }
 
     @PostMapping("/save/{word}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<?>> saveWord(@CurrentUser UserPrincipal userPrincipal, @PathVariable("word") String word, @RequestBody WordSaveRequest wordSaveRequest) {
         wordService.saveWordInfo(word, wordSaveRequest, userPrincipal.getId());
 
@@ -45,6 +47,7 @@ public class WordController {
     }
 
     @DeleteMapping("/delete/{word}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<?>> deleteWord(@CurrentUser UserPrincipal userPrincipal, @RequestBody WordDeleteRequest wordDeleteRequest) {
         wordService.deleteMemberWord(wordDeleteRequest.getWordId(), userPrincipal.getId());
 
@@ -52,6 +55,7 @@ public class WordController {
     }
 
     @PostMapping("/update/{word}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<?>> updateWord(@CurrentUser UserPrincipal userPrincipal, @RequestBody WordUpdateRequest wordUpdateRequest) {
         wordService.updateMemberWord(wordUpdateRequest, userPrincipal.getId());
 
@@ -59,12 +63,14 @@ public class WordController {
     }
 
     @GetMapping("/category")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<List<MemberWordCategoryResponse>>> getMemberCategories(@CurrentUser UserPrincipal userPrincipal) {
         Long memberId = userPrincipal.getId();
         return ApiResponse.success(wordService.getMemberCategories(memberId));
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<MemberWordDTO>> getMemberWords(@CurrentUser UserPrincipal userPrincipal) {
         MemberWordDTO memberWords = wordService.getMemberWords(0L, userPrincipal.getId());// TODO 240823 0L(전체 카테고리) 상수화
 
@@ -72,6 +78,7 @@ public class WordController {
     }
 
     @GetMapping("/{categoryId}/list")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<MemberWordDTO>> getMemberWords(@CurrentUser UserPrincipal userPrincipal, @PathVariable("categoryId") Long categoryId) {
         MemberWordDTO memberWords = wordService.getMemberWords(categoryId, userPrincipal.getId());
 

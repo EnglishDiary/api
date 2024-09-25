@@ -7,13 +7,14 @@ import org.eng_diary.api.dto.ApiResponse;
 import org.eng_diary.api.security.CurrentUser;
 import org.eng_diary.api.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/diary")
+@RequestMapping("/api/diary")
 @RequiredArgsConstructor
 public class DiaryController {
 
@@ -25,13 +26,15 @@ public class DiaryController {
     }
 
     @PostMapping("/ai-correction")
-    public ResponseEntity<ApiResponse<Map<String, String>>> requestAICorrection(@RequestBody AICorrectionRequest aiCorrectionRequest) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> requestAICorrection(@RequestBody AICorrectionRequest aiCorrectionRequest) {
         String diary = aiCorrectionRequest.getDiary();
 
         return ApiResponse.success(diaryService.requestAICorrection(diary));
     }
 
     @PostMapping("/save")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<?>> saveDiary(@CurrentUser UserPrincipal userPrincipal, @RequestBody DiarySaveRequest diarySaveRequest) {
         diaryService.saveDiary(diarySaveRequest, userPrincipal.getId());
         return ApiResponse.success("다이어리 업로드 성공");
