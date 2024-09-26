@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.eng_diary.api.business.auth.payload.UserDTO;
+import org.eng_diary.api.business.expression.payload.CompositionDTO;
 import org.eng_diary.api.business.expression.payload.CompositionRequest;
+import org.eng_diary.api.business.expression.payload.ExpressionDTO;
 import org.eng_diary.api.business.expression.payload.ExpressionSaveRequest;
 import org.eng_diary.api.business.expression.repository.ExpressionRepository;
 import org.eng_diary.api.domain.Composition;
@@ -22,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -154,4 +158,34 @@ public class ExpressionService {
         }
     }
 
+    public List<ExpressionDTO> getExpressionList() {
+        List<Expression> expressions = expressionRepository.getExpressionList();
+
+        List<ExpressionDTO> collect = expressions.stream().map((exp) -> {
+            ExpressionDTO expressionDTO = new ExpressionDTO();
+            expressionDTO.setId(exp.getId());
+            expressionDTO.setSummary(exp.getSummary());
+            expressionDTO.setOriginalSentence(exp.getOriginalSentence());
+            expressionDTO.setUserSentence(exp.getUserSentence());
+
+            List<CompositionDTO> compositionDTOList = exp.getCompositions().stream().map((com) -> {
+                CompositionDTO compositionDTO = new CompositionDTO();
+                compositionDTO.setId(com.getId());
+                compositionDTO.setParentId(exp.getId());
+                compositionDTO.setResultSentence(com.getResultSentence());
+                compositionDTO.setTranslation(com.getTranslation());
+                return compositionDTO;
+            }).collect(Collectors.toList());
+            expressionDTO.setCompositions(compositionDTOList);
+
+            Member member = exp.getMember();
+            UserDTO userInfo = new UserDTO();
+            userInfo.setName(member.getName());
+            userInfo.setProfileImgUrl(member.getProfileImageUrl());
+            expressionDTO.setUser(userInfo);
+
+            return expressionDTO;
+        }).collect(Collectors.toList());
+        return collect;
+    }
 }
