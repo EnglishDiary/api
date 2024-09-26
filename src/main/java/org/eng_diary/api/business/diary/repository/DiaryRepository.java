@@ -10,7 +10,6 @@ import java.util.List;
 
 import static org.eng_diary.api.business.auth.model.QUser.user;
 import static org.eng_diary.api.domain.QDiary.diary;
-import static org.eng_diary.api.domain.QMember.member;
 import static org.eng_diary.api.domain.QOfficialDiaryCategory.officialDiaryCategory;
 
 @Repository
