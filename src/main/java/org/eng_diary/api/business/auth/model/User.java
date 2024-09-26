@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @Column(name = "profile_image_url")
+    @Column(name = "profile_url")
     private String imageUrl;
 
     @Column(nullable = false)
