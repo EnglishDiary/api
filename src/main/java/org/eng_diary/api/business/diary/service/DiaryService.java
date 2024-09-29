@@ -10,7 +10,9 @@ import org.eng_diary.api.business.diary.dto.DiaryDetailDTO;
 import org.eng_diary.api.business.diary.dto.DiarySaveRequest;
 import org.eng_diary.api.business.diary.dto.OfficialCategoryDTO;
 import org.eng_diary.api.business.diary.repository.DiaryRepository;
+import org.eng_diary.api.business.filemng.repository.FileManagerRepository;
 import org.eng_diary.api.domain.Diary;
+import org.eng_diary.api.domain.FileMeta;
 import org.eng_diary.api.domain.OfficialDiaryCategory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +46,11 @@ public class DiaryService {
     private final RestTemplate restTemplate;
 
     private final DiaryRepository diaryRepository;
+    private final FileManagerRepository fileManagerRepository;
+
 
     @Transactional
-    public Map<String, String> requestAICorrection(String userDiary) {
+    public Map<String, Object> requestAICorrection(String userDiary) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiKey);
         headers.set("Content-Type", "application/json");
@@ -56,12 +61,12 @@ public class DiaryService {
             You are an AI assistant that converts diaries into English, corrects them, and provides feedback. The input diary may be in Korean, English, or a mix of both. Please provide the corrected English diary and feedback in HTML format. Use the following JSON format for your response:
             {
               "revisedDiary": "The corrected and improved version of the diary in English, ensuring natural flow and context-appropriate language, in HTML format",
-              "feedback": "피드백(문법적 오류 교정 및 더 자연스러운 표현으로의 개선)을 한국어로 작성한 HTML 포맷"            
+              "feedback": "다이어리에서 수정한 부분(문법적 오류교정 및 부자연스러운 표현 개선)에 대한 피드백들을 한국어로 작성한 HTML 포맷"            
             }
             Follow these steps:
             1. If the input is not in English, translate it to English.
             2. Correct and improve the English diary, focusing not only on grammar but also on enhancing the overall flow and natural expression of ideas.
-            3. Provide feedback in Korean about any corrections made, including both grammatical fixes and improvements in natural expression and context.
+            3. Provide feedback in Korean about all the corrections you made, including both grammatical fixes and improvements in natural expression and context.
             Ensure that your entire response is valid JSON above. 
         """;
 
@@ -96,12 +101,15 @@ public class DiaryService {
         }
 
         List<Map<String, Object>> choices = (List<Map<String, Object>>) parsedResponse.get("choices");
-
+        Map<String, Object> usage = (Map<String, Object>) parsedResponse.get("usage");
         Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
 
         String content = (String) message.get("content");
         String revisedDiary = "";
         String feedback = "";
+        int totalTokens = Integer.parseInt(usage.get("total_tokens").toString());
+
+        usage.get("total_token");
         try {
             JsonNode jsonNode = objectMapper.readTree(content);
             revisedDiary = jsonNode.get("revisedDiary").asText();
@@ -111,9 +119,10 @@ public class DiaryService {
         }
 
         // 원하는 포맷으로 재구성
-        Map<String, String> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         result.put("revisedDiary", revisedDiary);
         result.put("feedback", feedback);
+        result.put("totalTokens", totalTokens);
 
         return result;
     }
@@ -169,8 +178,10 @@ public class DiaryService {
         } else {
             diaries = diaryRepository.findDiariesByCategory (categoryId);
         }
+        List<Long> diaryIds = diaries.stream().map(Diary::getId).toList();
+        List<FileMeta> fileMetas = fileManagerRepository.findFileMetaList("diary", diaryIds);
 
-        return diaries.stream().map((diary) -> {
+        List<DiaryDTO> collect = diaries.stream().map((diary) -> {
             DiaryDTO dto = new DiaryDTO();
             dto.setId(diary.getId());
             dto.setTitle(diary.getTitle());
@@ -185,6 +196,8 @@ public class DiaryService {
             dto.setComments(0);
             return dto;
         }).collect(Collectors.toList());
+
+        return collect;
     }
 
     public DiaryDetailDTO getDiaryDetail(Long diaryId) {
