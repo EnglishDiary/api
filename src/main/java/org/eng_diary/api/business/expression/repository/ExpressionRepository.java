@@ -36,6 +36,7 @@ public class ExpressionRepository {
         return queryFactory.selectFrom(expression)
                 .join(expression.member, member).fetchJoin()
                 .join(expression.compositions, composition).fetchJoin()
+                .orderBy(expression.registerTime.desc())
                 .fetch();
     }
 }
