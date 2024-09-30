@@ -23,8 +23,11 @@ public class FileManagerRepository {
     public List<FileMeta> findFileMetaList(String tableName, List<Long> ids) {
         return queryFactory.selectFrom(fileMeta)
                 .where(fileMeta.referencedTable.eq(tableName))
-                .where(fileMeta.id.in(ids))
+                .where(fileMeta.tableRowId.in(ids))
                 .fetch();
     }
 
+    public void saveFileMeta(FileMeta fileMeta) {
+        em.persist(fileMeta);
+    }
 }
