@@ -1,10 +1,13 @@
 package org.eng_diary.api.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FileMeta {
 
     @Id
@@ -19,8 +22,10 @@ public class FileMeta {
     @Column(name = "extension")
     private String ext;
 
+    private Long size;
+
     private String referencedTable;
 
-    private String tableRowId;
+    private Long tableRowId;
 
 }
