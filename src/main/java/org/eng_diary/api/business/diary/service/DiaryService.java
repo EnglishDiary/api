@@ -11,9 +11,11 @@ import org.eng_diary.api.business.diary.dto.DiarySaveRequest;
 import org.eng_diary.api.business.diary.dto.OfficialCategoryDTO;
 import org.eng_diary.api.business.diary.repository.DiaryRepository;
 import org.eng_diary.api.business.filemng.repository.FileManagerRepository;
+import org.eng_diary.api.business.filemng.service.FileManagerService;
 import org.eng_diary.api.domain.Diary;
 import org.eng_diary.api.domain.FileMeta;
 import org.eng_diary.api.domain.OfficialDiaryCategory;
+import org.eng_diary.api.util.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,11 +24,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +45,7 @@ public class DiaryService {
 
     private final RestTemplate restTemplate;
 
+    private final FileManagerService fileManagerService;
     private final DiaryRepository diaryRepository;
     private final FileManagerRepository fileManagerRepository;
 
@@ -55,20 +56,22 @@ public class DiaryService {
         headers.set("Authorization", "Bearer " + apiKey);
         headers.set("Content-Type", "application/json");
 
-        String userMessage = "Please convert this diary into English, correct it, and provide feedback in Korean:\n\n" + userDiary;
+        String userMessage = "Please convert this diary into English, correct it, provide feedback in Korean, and translate the revised diary back to Korean:\n\n" + userDiary;
 
         String systemMessage = """
-            You are an AI assistant that converts diaries into English, corrects them, and provides feedback. The input diary may be in Korean, English, or a mix of both. Please provide the corrected English diary and feedback in HTML format. Use the following JSON format for your response:
-            {
-              "revisedDiary": "The corrected and improved version of the diary in English, ensuring natural flow and context-appropriate language, in HTML format",
-              "feedback": "다이어리에서 수정한 부분(문법적 오류교정 및 부자연스러운 표현 개선)에 대한 피드백들을 한국어로 작성한 HTML 포맷"            
-            }
-            Follow these steps:
-            1. If the input is not in English, translate it to English.
-            2. Correct and improve the English diary, focusing not only on grammar but also on enhancing the overall flow and natural expression of ideas.
-            3. Provide feedback in Korean about all the corrections you made, including both grammatical fixes and improvements in natural expression and context.
-            Ensure that your entire response is valid JSON above. 
-        """;
+        You are an AI assistant that converts diaries into English, corrects them, provides feedback, and translates the revised version back to Korean. The input diary may be in Korean, English, or a mix of both. Please provide the corrected English diary, feedback in Korean, and the Korean translation of the revised diary in HTML format. Use the following JSON format for your response:
+        {
+          "revisedDiary": "The corrected and improved version of the diary in English, ensuring natural flow and context-appropriate language, in HTML format",
+          "feedback": "다이어리에서 수정한 부분(문법적 오류교정 및 부자연스러운 표현 개선)에 대한 피드백들을 한국어로 작성한 HTML 포맷",
+          "translation": "영어로 수정된 다이어리를 한국어로 번역한 버전, HTML 포맷"
+        }
+        Follow these steps:
+        1. If the input is not in English, translate it to English.
+        2. Correct and improve the English diary, focusing not only on grammar but also on enhancing the overall flow and natural expression of ideas.
+        3. Provide feedback in Korean about all the corrections you made, including both grammatical fixes and improvements in natural expression and context.
+        4. Translate the revised English diary back to Korean.
+        Ensure that your entire response is valid JSON above. 
+    """;
 
         // 요청 바디 생성
         Map<String, Object> body = new HashMap<>();
@@ -107,13 +110,14 @@ public class DiaryService {
         String content = (String) message.get("content");
         String revisedDiary = "";
         String feedback = "";
+        String translation = "";
         int totalTokens = Integer.parseInt(usage.get("total_tokens").toString());
 
-        usage.get("total_token");
         try {
             JsonNode jsonNode = objectMapper.readTree(content);
             revisedDiary = jsonNode.get("revisedDiary").asText();
             feedback = jsonNode.get("feedback").asText();
+            translation = jsonNode.get("translation").asText();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -122,11 +126,11 @@ public class DiaryService {
         Map<String, Object> result = new HashMap<>();
         result.put("revisedDiary", revisedDiary);
         result.put("feedback", feedback);
+        result.put("translation", translation);
         result.put("totalTokens", totalTokens);
 
         return result;
     }
-
     public List<OfficialCategoryDTO> getOfficialCategory() {
         List<OfficialDiaryCategory> officialCategory = diaryRepository.findOfficialCategory();
 
