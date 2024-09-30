@@ -1,14 +1,17 @@
 package org.eng_diary.api.business.diary.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.diary.dto.*;
 import org.eng_diary.api.business.diary.service.DiaryService;
+import org.eng_diary.api.business.filemng.service.FileManagerService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.eng_diary.api.security.CurrentUser;
 import org.eng_diary.api.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -35,8 +38,8 @@ public class DiaryController {
 
     @PostMapping("/save")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ApiResponse<?>> saveDiary(@CurrentUser UserPrincipal userPrincipal, @RequestBody DiarySaveRequest diarySaveRequest) {
-        diaryService.saveDiary(diarySaveRequest, userPrincipal.getId());
+    public ResponseEntity<ApiResponse<?>> saveDiary(@CurrentUser UserPrincipal userPrincipal, @RequestPart(value = "file", required = false ) MultipartFile file, @Valid @RequestPart(value = "jsonData")  DiarySaveRequest diarySaveRequest) {
+        diaryService.saveDiary(diarySaveRequest, userPrincipal.getId(), file);
         return ApiResponse.success("다이어리 업로드 성공");
     }
 

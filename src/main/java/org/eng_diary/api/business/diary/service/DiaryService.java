@@ -144,7 +144,7 @@ public class DiaryService {
     }
 
     @Transactional
-    public void saveDiary(DiarySaveRequest diarySaveRequest, Long memberId) {
+    public void saveDiary(DiarySaveRequest diarySaveRequest, Long memberId, MultipartFile file) {
 
         User member = new User();
         member.setId(memberId);
@@ -171,6 +171,7 @@ public class DiaryService {
                 .build();
 
         diaryRepository.saveDiary(diary);
+        fileManagerService.saveFileMeta(file, "diary", diary.getId());
     }
 
     public List<DiaryDTO> getDiaries(Long categoryId) {
@@ -186,16 +187,24 @@ public class DiaryService {
         List<FileMeta> fileMetas = fileManagerRepository.findFileMetaList("diary", diaryIds);
 
         List<DiaryDTO> collect = diaries.stream().map((diary) -> {
+            String s3Url = fileMetas.stream()
+                    .filter(file -> diary.getId().equals(file.getTableRowId()))
+                    .findFirst()
+                    .map(FileMeta::getUploadName)
+                    .map(FileUtil::getFileUrl)
+                    .orElse(null);
+
             DiaryDTO dto = new DiaryDTO();
+
             dto.setId(diary.getId());
             dto.setTitle(diary.getTitle());
             dto.setContent(diary.getContent());
             dto.setRegisterTime(diary.getRegisterTime());
             dto.setMemberName(diary.getMember().getName());
-
-            // TODO 240906 아래 하드코딩 내용들 구현 필요
             dto.setMemberProfileUrl(diary.getMember().getImageUrl());
-            dto.setThumbnailUrl("https://occ-0-8407-2219.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeNzg-kMHhUBP4AmHnLsrPYzxKHVceLnkwtLhxZlDssj7KjhStloJR6px7EbquZ83uDcygnWkekxysvuNYVzLQ3GyBMRl2PpU7pO.jpg?r=db8");
+            dto.setThumbnailUrl(s3Url);
+
+            // TODO 249030 아래 좋아요 댓글 하드코딩 구현 필요
             dto.setLikes(0);
             dto.setComments(0);
             return dto;
