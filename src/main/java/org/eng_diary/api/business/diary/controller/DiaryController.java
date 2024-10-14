@@ -8,6 +8,8 @@ import org.eng_diary.api.business.filemng.service.FileManagerService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.eng_diary.api.security.CurrentUser;
 import org.eng_diary.api.security.UserPrincipal;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +46,12 @@ public class DiaryController {
     }
 
     @GetMapping("/official-category/{categoryId}/list")
-    public ResponseEntity<ApiResponse<List<DiaryDTO>>> getDiaries(@PathVariable("categoryId") Long categoryId) {
-        return ApiResponse.success(diaryService.getDiaries(categoryId));
+    public ResponseEntity<ApiResponse<List<DiaryDTO>>> getDiaries(
+            @PathVariable("categoryId") Long categoryId,
+//            @ModelAttribute PaginationData paginationData
+//            @ModelAttribute DiaryListRequest diaryListRequest,
+            Pageable pageable) {
+        return ApiResponse.successWithPaging(diaryService.getDiaries(categoryId, pageable));
     }
 
     @GetMapping("/{diaryId}/detail")

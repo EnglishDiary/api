@@ -3,6 +3,7 @@ package org.eng_diary.api.business.diary.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.auth.model.User;
 import org.eng_diary.api.business.diary.dto.DiaryDTO;
@@ -17,6 +18,9 @@ import org.eng_diary.api.domain.FileMeta;
 import org.eng_diary.api.domain.OfficialDiaryCategory;
 import org.eng_diary.api.util.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -174,19 +178,14 @@ public class DiaryService {
         fileManagerService.saveFileMeta(file, "diary", diary.getId());
     }
 
-    public List<DiaryDTO> getDiaries(Long categoryId) {
+    public Page<DiaryDTO> getDiaries(Long categoryId, Pageable pageable) {
+        List<Diary> diaries = diaryRepository.findDiariesByCategory (categoryId, pageable);
+        JPAQuery<Long> countQuery = diaryRepository.getDiaryCountQuery(categoryId);
 
-        List<Diary> diaries;
-
-        if (categoryId.equals(0L)) {
-            diaries = diaryRepository.findAllDiaries();
-        } else {
-            diaries = diaryRepository.findDiariesByCategory (categoryId);
-        }
         List<Long> diaryIds = diaries.stream().map(Diary::getId).toList();
         List<FileMeta> fileMetas = fileManagerRepository.findFileMetaList("diary", diaryIds);
 
-        List<DiaryDTO> collect = diaries.stream().map((diary) -> {
+        List<DiaryDTO> result = diaries.stream().map((diary) -> {
             String s3Url = fileMetas.stream()
                     .filter(file -> diary.getId().equals(file.getTableRowId()))
                     .findFirst()
@@ -210,7 +209,7 @@ public class DiaryService {
             return dto;
         }).collect(Collectors.toList());
 
-        return collect;
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
     }
 
     public DiaryDetailDTO getDiaryDetail(Long diaryId) {

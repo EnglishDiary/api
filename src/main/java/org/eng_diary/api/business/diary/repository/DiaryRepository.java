@@ -1,9 +1,12 @@
 package org.eng_diary.api.business.diary.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.eng_diary.api.domain.Diary;
 import org.eng_diary.api.domain.OfficialDiaryCategory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,22 +35,42 @@ public class DiaryRepository {
         em.persist(diary);
     }
 
-    public List<Diary> findDiariesByCategory(Long categoryId) {
+    public List<Diary> findDiariesByCategory(Long categoryId, Pageable pageable) {
+        BooleanExpression categoryCondition = getCategoryCondition(categoryId);
+
         return queryFactory.selectFrom(diary)
-                .where(diary.officialDiaryCategory.id.eq(categoryId)
-                        .and(diary.isDiaryPublic.eq(true)))
+                .where(
+                        diary.isDiaryPublic.eq(true),
+                        categoryCondition
+                )
                 .join(diary.member, user)
                 .orderBy(diary.registerTime.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
-    public List<Diary> findAllDiaries() {
-        return queryFactory.selectFrom(diary)
-                .where(diary.isDiaryPublic.eq(true))
-                .join(diary.member, user)
-                .orderBy(diary.registerTime.desc())
-                .fetch();
+    public JPAQuery<Long> getDiaryCountQuery(Long categoryId) {
+        BooleanExpression categoryCondition = getCategoryCondition(categoryId);
+
+        return queryFactory.select(diary.count())
+                .from(diary)
+                .where(diary.isDiaryPublic.eq(true),
+                    categoryCondition
+                );
     }
+
+    private BooleanExpression getCategoryCondition(Long categoryId) {
+        return categoryId == 0L ? null : diary.officialDiaryCategory.id.eq(categoryId);
+    }
+
+//    public List<Diary> findAllDiaries() {
+//        return queryFactory.selectFrom(diary)
+//                .where(diary.isDiaryPublic.eq(true))
+//                .join(diary.member, user)
+//                .orderBy(diary.registerTime.desc())
+//                .fetch();
+//    }
 
     public Diary findDiary(Long diaryId) {
         return queryFactory.selectFrom(diary)
@@ -55,4 +78,5 @@ public class DiaryRepository {
                 .where(diary.id.eq(diaryId))
                 .fetchOne();
     }
+
 }
