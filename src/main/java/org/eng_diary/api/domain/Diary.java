@@ -39,4 +39,6 @@ public class Diary extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "official_diary_category_id")
     private OfficialDiaryCategory officialDiaryCategory;
+
+    private String translation;
 }
