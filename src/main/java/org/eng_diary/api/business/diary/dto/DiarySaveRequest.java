@@ -27,4 +27,5 @@ public class DiarySaveRequest {
 
     private Long officialCategoryId;
 
+    private String translation;
 }

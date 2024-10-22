@@ -172,6 +172,7 @@ public class DiaryService {
                 .isFeedbackPublic(diarySaveRequest.isFeedbackPublic())
                 .member(member)
                 .officialDiaryCategory(officialDiaryCategory)
+                .translation(diarySaveRequest.getTranslation())
                 .build();
 
         diaryRepository.saveDiary(diary);
@@ -222,6 +223,7 @@ public class DiaryService {
         dto.setContent(diary.getContent());
         dto.setMemberName(diary.getMember().getName());
         dto.setRegisterTime(diary.getRegisterTime());
+        dto.setTranslation(diary.getTranslation());
 
         if (diary.isFeedbackPublic()) {
             dto.setAiFeedback(diary.getAiFeedback());

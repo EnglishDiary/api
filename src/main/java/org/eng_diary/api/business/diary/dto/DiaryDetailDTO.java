@@ -31,6 +31,8 @@ public class DiaryDetailDTO {
 
     private Integer comments;
 
+    private String translation;
+
 
 
 }
