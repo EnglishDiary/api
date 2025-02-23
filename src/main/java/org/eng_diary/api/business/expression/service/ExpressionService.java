@@ -3,17 +3,21 @@ package org.eng_diary.api.business.expression.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.auth.payload.UserDTO;
-import org.eng_diary.api.business.expression.payload.CompositionDTO;
-import org.eng_diary.api.business.expression.payload.CompositionRequest;
-import org.eng_diary.api.business.expression.payload.ExpressionDTO;
-import org.eng_diary.api.business.expression.payload.ExpressionSaveRequest;
+import org.eng_diary.api.business.expression.entity.Job;
+import org.eng_diary.api.business.expression.entity.Task;
+import org.eng_diary.api.business.expression.payload.*;
 import org.eng_diary.api.business.expression.repository.ExpressionRepository;
+import org.eng_diary.api.business.expression.repository.JobRepository;
 import org.eng_diary.api.domain.Composition;
 import org.eng_diary.api.domain.Expression;
 import org.eng_diary.api.domain.Member;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -44,6 +48,7 @@ public class ExpressionService {
     private final RestTemplate restTemplate;
 
     private final ExpressionRepository expressionRepository;
+    private final JobRepository jobRepository;
 
     public Map<String, Object> requestAICorrection(CompositionRequest request) {
         HttpHeaders headers = new HttpHeaders();
@@ -158,10 +163,11 @@ public class ExpressionService {
         }
     }
 
-    public List<ExpressionDTO> getExpressionList() {
-        List<Expression> expressions = expressionRepository.getExpressionList();
+    public Page<ExpressionDTO> getExpressionList(ExpressionRequest request, Pageable pageable) {
+        List<Expression> expressions = expressionRepository.getExpressionList(pageable);
+        JPAQuery<Long> countQuery = expressionRepository.getExpressionCountQuery(request);
 
-        List<ExpressionDTO> collect = expressions.stream().map((exp) -> {
+        List<ExpressionDTO> expressionList = expressions.stream().map((exp) -> {
             ExpressionDTO expressionDTO = new ExpressionDTO();
             expressionDTO.setId(exp.getId());
             expressionDTO.setSummary(exp.getSummary());
@@ -186,6 +192,25 @@ public class ExpressionService {
 
             return expressionDTO;
         }).collect(Collectors.toList());
-        return collect;
+
+        return PageableExecutionUtils.getPage(expressionList, pageable, countQuery::fetchCount);
+    }
+
+    @Transactional
+    public void myTest() {
+
+//        expressionRepository.insertTask(task);
+
+//        Job job = expressionRepository.findJob();
+
+//        Job job = jobRepository.findById(1L).orElse(null);
+
+//        Job job2 = jobRepository.findByIdWithTasksAndSvrs(1L).orElse(null);
+
+//        List<Task> taskList = expressionRepository.findTask(1L);
+
+        Job jobById = expressionRepository.findJobById(1L);
+
+        System.out.println("");
     }
 }

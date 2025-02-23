@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.diary.dto.AICorrectionRequest;
 import org.eng_diary.api.business.expression.payload.CompositionRequest;
 import org.eng_diary.api.business.expression.payload.ExpressionDTO;
+import org.eng_diary.api.business.expression.payload.ExpressionRequest;
 import org.eng_diary.api.business.expression.payload.ExpressionSaveRequest;
 import org.eng_diary.api.business.expression.service.ExpressionService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.eng_diary.api.security.CurrentUser;
 import org.eng_diary.api.security.UserPrincipal;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +40,15 @@ public class ExpressionController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<ApiResponse<List<ExpressionDTO>>> getExpressionList() {
-        return ApiResponse.success(expressionService.getExpressionList());
+    public ResponseEntity<ApiResponse<List<ExpressionDTO>>> getExpressionList(ExpressionRequest request, Pageable pageable) {
+//        return ApiResponse.success(expressionService.getExpressionList());
+        return ApiResponse.successWithPaging(expressionService.getExpressionList(request, pageable));
+    }
+
+    @GetMapping("/test/deploy")
+    public ResponseEntity<?> myTest() {
+        expressionService.myTest();
+        return null;
     }
 
 }
