@@ -12,15 +12,15 @@
 * BOOT-INF/lib 디렉토리에 들어있는 모든 jar 파일을 순회하면서 위와 같은 json 객체를 만들어 배열에 담는다.
 
 <라이브러리 version 정보 추출 과정>
-2-1. MANIFEST.MF에서 "Implementation-version" 이라는 key값이 있는지 확인 후 있으면 json객체 version에 값을 쓴다 (없으면 2-2로 이동)
-2-2. MANIFEST.MF에서 "Bundle-version" 이라는 key값이 있는지 확인 후 있으면 json객체 version에 값을 쓴다 (없으면 2-3로 이동)
-2-3. pom.properties(일부 jar파일에 maven 디렉토리가 존재함)파일에서 version이라는 key값이 있는지 확인 후 있으면 json객체 version에 값을 쓴다 (없으면 2-4로 이동)
-2-4. 메타데이터에서 버전정보를 추출할 수 없다 판단하고 그냥 jar 파일명에서 버전 정보를 뽑아낸 뒤 json 객체 vesrion에 값을 쓴다
+1-1. MANIFEST.MF에서 "Implementation-version" 이라는 key값이 있는지 확인 후 있으면 json객체 version에 값을 쓴다 (없으면 2-2로 이동)
+1-2. MANIFEST.MF에서 "Bundle-version" 이라는 key값이 있는지 확인 후 있으면 json객체 version에 값을 쓴다 (없으면 2-3로 이동)
+1-3. pom.properties(일부 jar파일에 maven 디렉토리가 존재함)파일에서 version이라는 key값이 있는지 확인 후 있으면 json객체 version에 값을 쓴다 (없으면 2-4로 이동)
+1-4. 메타데이터에서 버전정보를 추출할 수 없다 판단하고 그냥 jar 파일명에서 버전 정보를 뽑아낸 뒤 json 객체 vesrion에 값을 쓴다
 
 <라이브러리 title 정보 추출 과정>
-3-1. MANIFEST.MF에서 "Implementation-title" 이라는 key값이 있는지 확인 후 있으면 json객체 title에 값을 쓴다 (없으면 3-2로 이동)
-3-2. pom.properties(일부 jar파일에 maven 디렉토리가 존재함)파일에서 artifactId이라는 key값이 있는지 확인 후 있으면 json객체 title에 값을 쓴다 (없으면 3-3로 이동)
-3-3. 메타데이터에서 버전정보를 추출할 수 없다 판단하고 그냥 jar 파일명에서 라이브러리명을 뽑아낸 뒤 json 객체 title에 값을 쓴다
+2-1. MANIFEST.MF에서 "Implementation-title" 이라는 key값이 있는지 확인 후 있으면 json객체 title에 값을 쓴다 (없으면 3-2로 이동)
+2-2. pom.properties(일부 jar파일에 maven 디렉토리가 존재함)파일에서 artifactId이라는 key값이 있는지 확인 후 있으면 json객체 title에 값을 쓴다 (없으면 3-3로 이동)
+2-3. 메타데이터에서 버전정보를 추출할 수 없다 판단하고 그냥 jar 파일명에서 라이브러리명을 뽑아낸 뒤 json 객체 title에 값을 쓴다
 
 <공통 - 파일명에는 거의 100% 라이브러리명과 버전정보가 명시되어 있음>
-4. jar 파일명 전체 문자열에서 라이브브러리 이름에 해당하는 부분과 버전에 해당하는 부분을 분리하여 각각 json 객체의 titleFromJar, versionFromJar 속성에 값을 쓴다.
+3. jar 파일명 전체 문자열에서 라이브브러리 이름에 해당하는 부분과 버전에 해당하는 부분을 분리하여 각각 json 객체의 titleFromJar, versionFromJar 속성에 값을 쓴다.
