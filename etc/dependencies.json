@@ -1,0 +1,608 @@
+[
+  {
+    "versionFromJar": "6.3.1",
+    "title": "spring-security-oauth2-client",
+    "titleFromJar": "spring-security-oauth2-client",
+    "version": "6.3.1"
+  },
+  {
+    "versionFromJar": "1.8.0",
+    "title": "p6spy-spring-boot-starter",
+    "titleFromJar": "p6spy-spring-boot-starter",
+    "version": "1.8.0"
+  },
+  {
+    "versionFromJar": "1.12.472",
+    "title": "aws-java-sdk-s3",
+    "titleFromJar": "aws-java-sdk-s3",
+    "version": "1.12.472"
+  },
+  {
+    "versionFromJar": "0.4",
+    "title": "jbcrypt",
+    "titleFromJar": "jbcrypt",
+    "version": "0.4"
+  },
+  {
+    "versionFromJar": "0.11.5",
+    "title": "JJWT :: Impl",
+    "titleFromJar": "jjwt-impl",
+    "version": "0.11.5"
+  },
+  {
+    "versionFromJar": "0.11.5",
+    "title": "JJWT :: Extensions :: Jackson",
+    "titleFromJar": "jjwt-jackson",
+    "version": "0.11.5"
+  },
+  {
+    "versionFromJar": "0.11.5",
+    "title": "JJWT :: API",
+    "titleFromJar": "jjwt-api",
+    "version": "0.11.5"
+  },
+  {
+    "versionFromJar": "5.0.0-jakarta",
+    "title": "querydsl-jpa",
+    "titleFromJar": "querydsl-jpa",
+    "version": "5.0.0"
+  },
+  {
+    "versionFromJar": "5.0.0",
+    "title": "querydsl-collections",
+    "titleFromJar": "querydsl-collections",
+    "version": "5.0.0"
+  },
+  {
+    "versionFromJar": "5.1.0",
+    "title": "querydsl-apt",
+    "titleFromJar": "querydsl-apt",
+    "version": "5.1.0"
+  },
+  {
+    "versionFromJar": "5.1.0",
+    "title": "querydsl-codegen",
+    "titleFromJar": "querydsl-codegen",
+    "version": "5.1.0"
+  },
+  {
+    "versionFromJar": "5.0.0",
+    "title": "querydsl-core",
+    "titleFromJar": "querydsl-core",
+    "version": "5.0.0"
+  },
+  {
+    "versionFromJar": "42.7.3",
+    "title": "PostgreSQL JDBC Driver",
+    "titleFromJar": "postgresql",
+    "version": "42.7.3"
+  },
+  {
+    "versionFromJar": "1.8.0",
+    "title": "datasource-decorator-spring-boot-autoconfigure",
+    "titleFromJar": "datasource-decorator-spring-boot-autoconfigure",
+    "version": "1.8.0"
+  },
+  {
+    "versionFromJar": "6.3.1",
+    "title": "spring-security-config",
+    "titleFromJar": "spring-security-config",
+    "version": "6.3.1"
+  },
+  {
+    "versionFromJar": "6.3.1",
+    "title": "spring-security-web",
+    "titleFromJar": "spring-security-web",
+    "version": "6.3.1"
+  },
+  {
+    "versionFromJar": "6.3.1",
+    "title": "spring-security-oauth2-core",
+    "titleFromJar": "spring-security-oauth2-core",
+    "version": "6.3.1"
+  },
+  {
+    "versionFromJar": "6.3.1",
+    "title": "spring-security-core",
+    "titleFromJar": "spring-security-core",
+    "version": "6.3.1"
+  },
+  {
+    "versionFromJar": "3.3.2",
+    "title": "Spring Data JPA",
+    "titleFromJar": "spring-data-jpa",
+    "version": "3.3.2"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-webmvc",
+    "titleFromJar": "spring-webmvc",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "3.3.2",
+    "title": "Spring Boot AutoConfigure",
+    "titleFromJar": "spring-boot-autoconfigure",
+    "version": "3.3.2"
+  },
+  {
+    "versionFromJar": "3.3.2",
+    "title": "Spring Boot",
+    "titleFromJar": "spring-boot",
+    "version": "3.3.2"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-context",
+    "titleFromJar": "spring-context",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-aop",
+    "titleFromJar": "spring-aop",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-web",
+    "titleFromJar": "spring-web",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-orm",
+    "titleFromJar": "spring-orm",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-jdbc",
+    "titleFromJar": "spring-jdbc",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "3.3.2",
+    "title": "Spring Data Core",
+    "titleFromJar": "spring-data-commons",
+    "version": "3.3.2"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-tx",
+    "titleFromJar": "spring-tx",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-beans",
+    "titleFromJar": "spring-beans",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-expression",
+    "titleFromJar": "spring-expression",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-core",
+    "titleFromJar": "spring-core",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "9.43.4",
+    "title": "OAuth 2.0 SDK with OpenID Connect extensions",
+    "titleFromJar": "oauth2-oidc-sdk",
+    "version": "9.43.4"
+  },
+  {
+    "versionFromJar": "6.5.2",
+    "title": "hibernate-core",
+    "titleFromJar": "hibernate-core",
+    "version": "6.5.2.Final"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-aspects",
+    "titleFromJar": "spring-aspects",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "3.9.0",
+    "title": "p6spy",
+    "titleFromJar": "p6spy",
+    "version": "3.9.0"
+  },
+  {
+    "versionFromJar": "10.1.26",
+    "title": "Apache Tomcat",
+    "titleFromJar": "tomcat-embed-el",
+    "version": "10.1.26"
+  },
+  {
+    "versionFromJar": "8.0.1",
+    "title": "hibernate-validator",
+    "titleFromJar": "hibernate-validator",
+    "version": "8.0.1.Final"
+  },
+  {
+    "versionFromJar": "1.12.472",
+    "title": "aws-java-sdk-kms",
+    "titleFromJar": "aws-java-sdk-kms",
+    "version": "1.12.472"
+  },
+  {
+    "versionFromJar": "1.12.472",
+    "title": "aws-java-sdk-core",
+    "titleFromJar": "aws-java-sdk-core",
+    "version": "1.12.472"
+  },
+  {
+    "versionFromJar": "1.12.472",
+    "title": "jmespath-java",
+    "titleFromJar": "jmespath-java",
+    "version": "1.12.472"
+  },
+  {
+    "versionFromJar": "0.2.4",
+    "title": "mysema-commons-lang",
+    "titleFromJar": "mysema-commons-lang",
+    "version": "0.2.4"
+  },
+  {
+    "versionFromJar": "2.17.2",
+    "title": "Jackson datatype: JSR310",
+    "titleFromJar": "jackson-datatype-jsr310",
+    "version": "2.17.2"
+  },
+  {
+    "versionFromJar": "2.17.2",
+    "title": "Jackson-module-parameter-names",
+    "titleFromJar": "jackson-module-parameter-names",
+    "version": "2.17.2"
+  },
+  {
+    "versionFromJar": "2.17.2",
+    "title": "Jackson dataformat: CBOR",
+    "titleFromJar": "jackson-dataformat-cbor",
+    "version": "2.17.2"
+  },
+  {
+    "versionFromJar": "2.17.2",
+    "title": "Jackson-annotations",
+    "titleFromJar": "jackson-annotations",
+    "version": "2.17.2"
+  },
+  {
+    "versionFromJar": "2.17.2",
+    "title": "Jackson-core",
+    "titleFromJar": "jackson-core",
+    "version": "2.17.2"
+  },
+  {
+    "versionFromJar": "2.17.2",
+    "title": "Jackson datatype: jdk8",
+    "titleFromJar": "jackson-datatype-jdk8",
+    "version": "2.17.2"
+  },
+  {
+    "versionFromJar": "2.17.2",
+    "title": "jackson-databind",
+    "titleFromJar": "jackson-databind",
+    "version": "2.17.2"
+  },
+  {
+    "versionFromJar": "3.42.0",
+    "title": "checker-qual",
+    "titleFromJar": "checker-qual",
+    "version": "3.42.0"
+  },
+  {
+    "versionFromJar": "2.1.1",
+    "title": "jakarta.annotation-api",
+    "titleFromJar": "jakarta.annotation-api",
+    "version": "2.1.1"
+  },
+  {
+    "versionFromJar": "2.2",
+    "title": "snakeyaml",
+    "titleFromJar": "snakeyaml",
+    "version": "2.2.0"
+  },
+  {
+    "versionFromJar": "6.3.1",
+    "title": "spring-security-crypto",
+    "titleFromJar": "spring-security-crypto",
+    "version": "6.3.1"
+  },
+  {
+    "versionFromJar": "1.13.2",
+    "title": "io.micrometer#micrometer-observation;1.13.2",
+    "titleFromJar": "micrometer-observation",
+    "version": "1.13.2"
+  },
+  {
+    "versionFromJar": "6.1.11",
+    "title": "spring-jcl",
+    "titleFromJar": "spring-jcl",
+    "version": "6.1.11"
+  },
+  {
+    "versionFromJar": "9.37.3",
+    "title": "Nimbus JOSE+JWT",
+    "titleFromJar": "nimbus-jose-jwt",
+    "version": "9.37.3"
+  },
+  {
+    "versionFromJar": "1.0-1",
+    "title": "jcip-annotations",
+    "titleFromJar": "jcip-annotations",
+    "version": "1.0-1"
+  },
+  {
+    "versionFromJar": "2.2",
+    "title": "Nimbus Content Type",
+    "titleFromJar": "content-type",
+    "version": "2.2"
+  },
+  {
+    "versionFromJar": "2.5.1",
+    "title": "json-smart",
+    "titleFromJar": "json-smart",
+    "version": "2.5.1"
+  },
+  {
+    "versionFromJar": "1.7",
+    "title": "Nimbus LangTag",
+    "titleFromJar": "lang-tag",
+    "version": "1.7"
+  },
+  {
+    "versionFromJar": "1.9.22.1",
+    "title": "aspectjweaver",
+    "titleFromJar": "aspectjweaver",
+    "version": "1.9.22.1"
+  },
+  {
+    "versionFromJar": "5.1.0",
+    "title": "HikariCP",
+    "titleFromJar": "HikariCP",
+    "version": "5.1.0"
+  },
+  {
+    "versionFromJar": "3.1.0",
+    "title": "jakarta.persistence-api",
+    "titleFromJar": "jakarta.persistence-api",
+    "version": "3.1.0"
+  },
+  {
+    "versionFromJar": "2.0.1",
+    "title": "jakarta.transaction-api",
+    "titleFromJar": "jakarta.transaction-api",
+    "version": "2.0.1"
+  },
+  {
+    "versionFromJar": "3.5.3",
+    "title": "JBoss Logging 3",
+    "titleFromJar": "jboss-logging",
+    "version": "3.5.3.Final"
+  },
+  {
+    "versionFromJar": "6.0.6",
+    "title": "hibernate-commons-annotations",
+    "titleFromJar": "hibernate-commons-annotations",
+    "version": "6.0.6.Final"
+  },
+  {
+    "versionFromJar": "3.1.2",
+    "title": "jandex",
+    "titleFromJar": "jandex",
+    "version": "3.1.2"
+  },
+  {
+    "versionFromJar": "1.7.0",
+    "title": "ClassMate",
+    "titleFromJar": "classmate",
+    "version": "1.7.0"
+  },
+  {
+    "versionFromJar": "1.14.18",
+    "title": "byte-buddy",
+    "titleFromJar": "byte-buddy",
+    "version": "1.14.18"
+  },
+  {
+    "versionFromJar": "4.0.5",
+    "title": "Eclipse Implementation of JAXB",
+    "titleFromJar": "jaxb-runtime",
+    "version": "4.0.5 - cb19596"
+  },
+  {
+    "versionFromJar": "4.0.5",
+    "title": "Eclipse Implementation of JAXB",
+    "titleFromJar": "jaxb-core",
+    "version": "4.0.5 - cb19596"
+  },
+  {
+    "versionFromJar": "4.0.2",
+    "title": "jakarta.xml.bind-api",
+    "titleFromJar": "jakarta.xml.bind-api",
+    "version": "4.0.2"
+  },
+  {
+    "versionFromJar": "2.0.1",
+    "title": "jakarta.inject-api",
+    "titleFromJar": "jakarta.inject-api",
+    "version": "2.0"
+  },
+  {
+    "versionFromJar": "4.13.0",
+    "title": "ANTLR 4 Runtime",
+    "titleFromJar": "antlr4-runtime",
+    "version": "4.13.0"
+  },
+  {
+    "versionFromJar": "1.5.6",
+    "title": "Logback Classic Module",
+    "titleFromJar": "logback-classic",
+    "version": "1.5.6"
+  },
+  {
+    "versionFromJar": "2.23.1",
+    "title": "Apache Log4j to SLF4J Adapter",
+    "titleFromJar": "log4j-to-slf4j",
+    "version": "2.23.1"
+  },
+  {
+    "versionFromJar": "2.0.13",
+    "title": "jul-to-slf4j",
+    "titleFromJar": "jul-to-slf4j",
+    "version": "2.0.13"
+  },
+  {
+    "versionFromJar": "2.0.13",
+    "title": "slf4j-api",
+    "titleFromJar": "slf4j-api",
+    "version": "2.0.13"
+  },
+  {
+    "versionFromJar": "10.1.26",
+    "title": "Apache Tomcat",
+    "titleFromJar": "tomcat-embed-websocket",
+    "version": "10.1.26"
+  },
+  {
+    "versionFromJar": "10.1.26",
+    "title": "Apache Tomcat",
+    "titleFromJar": "tomcat-embed-core",
+    "version": "10.1.26"
+  },
+  {
+    "versionFromJar": "3.0.2",
+    "title": "jakarta.validation-api",
+    "titleFromJar": "jakarta.validation-api",
+    "version": "3.0.2"
+  },
+  {
+    "versionFromJar": "4.5.13",
+    "title": "Apache HttpClient",
+    "titleFromJar": "httpclient",
+    "version": "4.5.13"
+  },
+  {
+    "versionFromJar": "1.2",
+    "title": "Apache Commons Logging",
+    "titleFromJar": "commons-logging",
+    "version": "1.2"
+  },
+  {
+    "versionFromJar": "1.16.1",
+    "title": "Apache Commons Codec",
+    "titleFromJar": "commons-codec",
+    "version": "1.16.1"
+  },
+  {
+    "versionFromJar": "1.0.2",
+    "title": "ion-java",
+    "titleFromJar": "ion-java",
+    "version": "1.0.2"
+  },
+  {
+    "versionFromJar": "2.8.1",
+    "title": "org.joda.time",
+    "titleFromJar": "joda-time",
+    "version": "2.8.1"
+  },
+  {
+    "versionFromJar": "5.1.0",
+    "title": "codegen-utils",
+    "titleFromJar": "codegen-utils",
+    "version": "5.1.0"
+  },
+  {
+    "versionFromJar": "unknown",
+    "title": "javax.inject-1",
+    "titleFromJar": "javax.inject-1",
+    "version": "unknown"
+  },
+  {
+    "versionFromJar": "4.8.146",
+    "title": "ClassGraph",
+    "titleFromJar": "classgraph",
+    "version": "4.8.146"
+  },
+  {
+    "versionFromJar": "1.13.2",
+    "title": "io.micrometer#micrometer-commons;1.13.2",
+    "titleFromJar": "micrometer-commons",
+    "version": "1.13.2"
+  },
+  {
+    "versionFromJar": "2.5.1",
+    "title": "accessors-smart",
+    "titleFromJar": "accessors-smart",
+    "version": "2.5.1"
+  },
+  {
+    "versionFromJar": "2.0.2",
+    "title": "Angus Activation Registries",
+    "titleFromJar": "angus-activation",
+    "version": "2.0.2"
+  },
+  {
+    "versionFromJar": "2.1.3",
+    "title": "Jakarta Activation API",
+    "titleFromJar": "jakarta.activation-api",
+    "version": "2.1.3"
+  },
+  {
+    "versionFromJar": "4.4.16",
+    "title": "HttpComponents Apache HttpCore",
+    "titleFromJar": "httpcore",
+    "version": "4.4.16"
+  },
+  {
+    "versionFromJar": "3.26.0",
+    "title": "ecj",
+    "titleFromJar": "ecj",
+    "version": "3.26.0.v20210609-0549"
+  },
+  {
+    "versionFromJar": "1.5.6",
+    "title": "Logback Core Module",
+    "titleFromJar": "logback-core",
+    "version": "1.5.6"
+  },
+  {
+    "versionFromJar": "2.23.1",
+    "title": "Apache Log4j API",
+    "titleFromJar": "log4j-api",
+    "version": "2.23.1"
+  },
+  {
+    "versionFromJar": "9.6",
+    "title": "ASM, a very small and fast Java bytecode manipulation framework",
+    "titleFromJar": "asm",
+    "version": "9.6"
+  },
+  {
+    "versionFromJar": "4.0.5",
+    "title": "Eclipse Implementation of JAXB",
+    "titleFromJar": "txw2",
+    "version": "4.0.5 - cb19596"
+  },
+  {
+    "versionFromJar": "4.1.2",
+    "title": "istack-commons-runtime",
+    "titleFromJar": "istack-commons-runtime",
+    "version": "4.1.2"
+  },
+  {
+    "versionFromJar": "3.3.2",
+    "title": "Spring Boot Jarmode Tools",
+    "titleFromJar": "spring-boot-jarmode-tools",
+    "version": "3.3.2"
+  }
+]
