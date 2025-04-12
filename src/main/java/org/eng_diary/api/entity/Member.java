@@ -1,12 +1,13 @@
 package org.eng_diary.api.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@Setter
 public class Member extends BaseEntity {
 
     @Id
@@ -14,11 +15,9 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_name")
-    private String name;
+    @Column(name = "nickname")
+    private String nickname;
 
-    private String registrationId;
-
-    private String profileImageUrl;
+//    private String profileImageUrl;
 
 }
