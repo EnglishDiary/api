@@ -44,30 +44,30 @@ public class WordService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public MemberResponse testService() {
-        Member member = wordRepository.findMember();
-        Member member2 = wordRepository.findMember2();
-
-        MemberResponse memberResponse = new MemberResponse();
-        memberResponse.setId(member.getId());
-        memberResponse.setName(member.getName());
-        memberResponse.setRegistrationId(member.getRegistrationId());
-
-        return memberResponse;
-    }
-
-    public List<MemberResponse> testMultipleData() {
-        MemberResponse member1 = new MemberResponse();
-        member1.setName("John");
-
-        MemberResponse member2 = new MemberResponse();
-        member2.setName("Kim");
-
-        ArrayList<MemberResponse> memberResponses = new ArrayList<>();
-        memberResponses.add(member1);
-        memberResponses.add(member2);
-        return memberResponses;
-    }
+//    public MemberResponse testService() {
+//        Member member = wordRepository.findMember();
+//        Member member2 = wordRepository.findMember2();
+//
+//        MemberResponse memberResponse = new MemberResponse();
+//        memberResponse.setId(member.getId());
+//        memberResponse.setName(member.getNickname());
+////        memberResponse.setRegistrationId(member.getRegistrationId());
+//
+//        return memberResponse;
+//    }
+//
+//    public List<MemberResponse> testMultipleData() {
+//        MemberResponse member1 = new MemberResponse();
+//        member1.setName("John");
+//
+//        MemberResponse member2 = new MemberResponse();
+//        member2.setName("Kim");
+//
+//        ArrayList<MemberResponse> memberResponses = new ArrayList<>();
+//        memberResponses.add(member1);
+//        memberResponses.add(member2);
+//        return memberResponses;
+//    }
 
     /**
      *
@@ -132,7 +132,7 @@ public class WordService {
 
             MemberWord memberWord = new MemberWord();
             Member member = new Member();
-            member.setId(1L);
+//            member.setId(1L);
             memberWord.setWord(word);
             memberWord.setMember(member);
             memberWord.setRegisterTime(wordSaveRequest.getRegisterTime() == null ?  LocalDateTime.now(): wordSaveRequest.getRegisterTime());
