@@ -54,11 +54,11 @@ public class AiService {
         // 메시지 구성
         String userMessage = "아래 영어문장을 전체적으로 분석해주세요(주목할 문법, 어려운 단어 혹은 숙어, 주요한 표현 위주로). 설정된 시스템메세지를 반드시 참고하여 답변하세요.\n\n" + sentence.getPassage();
         String systemMessage = """
-            You are an AI assistant that helps Koreans study English. Analyze the given English sentence or passage.
+            You are an AI assistant that helps Korean study English. Analyze the given English sentence or passage.
             Provide your response in the following JSON format:
             
             {
-              "result": "여기에 마크다운 형식으로 영어 문장 분석 내용을 작성해주세요. 주요 문법, 어려운 단어, 숙어, 주요 표현 등을 포함하세요."
+              "result": "여기에 마크다운 형식으로 영어 문장 분석 내용을 작성해주세요. 문장에 사용된 주요 문법, 어려운 단어, 숙어, 주요 표현 등을 설명해주세요."
             }
             
             결과는 마크다운 형식으로 작성하고, 한국어로 설명해주세요. 전체 응답이 유효한 JSON 형식인지 확인하세요.
