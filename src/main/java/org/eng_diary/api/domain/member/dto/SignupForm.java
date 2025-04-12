@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class SignupRequest {
+public class SignupForm {
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     @Size(min = 5, max = 20, message = "아이디는 5자 이상 20자 이하여야 합니다.")
