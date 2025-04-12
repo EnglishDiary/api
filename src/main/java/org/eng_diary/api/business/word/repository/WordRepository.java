@@ -34,7 +34,7 @@ public class WordRepository {
     public Member findMember2() {
 
         return queryFactory.selectFrom(member)
-                .where(member.name.eq("최상욱"))
+                .where(member.nickname.eq("최상욱"))
                 .where(member.id.eq(1L))
                 .fetchOne();
     }

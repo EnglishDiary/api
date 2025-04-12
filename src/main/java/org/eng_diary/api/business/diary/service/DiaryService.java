@@ -131,7 +131,7 @@ public class DiaryService {
 
         // TODO 240906 멤버 하드코딩 제거
         Member member = new Member();
-        member.setId(1L);
+//        member.setId(1L);
 
         // TODO 240906 프론트에서 카테고리 id 받은 거 db에 select 한 번 날려보긴 해야 함
         OfficialDiaryCategory officialDiaryCategory = new OfficialDiaryCategory();
@@ -172,8 +172,8 @@ public class DiaryService {
             dto.setId(diary.getId());
             dto.setTitle(diary.getTitle());
             dto.setContent(diary.getContent());
-            dto.setRegisterTime(diary.getRegisterTime());
-            dto.setMemberName(diary.getMember().getName());
+            dto.setRegisterTime(diary.getCreatedAt());
+            dto.setMemberName(diary.getMember().getNickname());
 
             // TODO 240906 하드코딩 내용들 구현 필요
             dto.setMemberProfileUrl("https://assets.pokemon.com/assets/cms2/img/pokedex/full//001.png");
@@ -192,8 +192,8 @@ public class DiaryService {
         dto.setId(diary.getId());
         dto.setTitle(diary.getTitle());
         dto.setContent(diary.getContent());
-        dto.setMemberName(diary.getMember().getName());
-        dto.setRegisterTime(diary.getRegisterTime());
+        dto.setMemberName(diary.getMember().getNickname());
+        dto.setRegisterTime(diary.getCreatedAt());
 
         if (diary.isFeedbackPublic()) {
             dto.setAiFeedback(diary.getAiFeedback());

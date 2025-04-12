@@ -37,7 +37,7 @@ public class DiaryRepository {
                 .where(diary.officialDiaryCategory.id.eq(categoryId)
                         .and(diary.isDiaryPublic.eq(true)))
                 .join(diary.member, member)
-                .orderBy(diary.registerTime.desc())
+                .orderBy(diary.createdAt.desc())
                 .fetch();
     }
 
@@ -45,7 +45,7 @@ public class DiaryRepository {
         return queryFactory.selectFrom(diary)
                 .where(diary.isDiaryPublic.eq(true))
                 .join(diary.member, member)
-                .orderBy(diary.registerTime.desc())
+                .orderBy(diary.createdAt.desc())
                 .fetch();
     }
 

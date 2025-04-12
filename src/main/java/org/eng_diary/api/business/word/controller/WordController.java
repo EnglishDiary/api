@@ -17,17 +17,17 @@ public class WordController {
 
     private final WordService wordService;
 
-    @GetMapping("/test")
-    public ResponseEntity<ApiResponse<MemberResponse>> test() {
-        MemberResponse result = wordService.testService();
-        return ApiResponse.success(result);
-    }
-
-    @GetMapping("/test/multiple")
-    public ResponseEntity<ApiResponse<List<MemberResponse>>> testMultipleData() {
-        List<MemberResponse> memberResponses = wordService.testMultipleData();
-        return ApiResponse.success(memberResponses);
-    }
+//    @GetMapping("/test")
+//    public ResponseEntity<ApiResponse<MemberResponse>> test() {
+//        MemberResponse result = wordService.testService();
+//        return ApiResponse.success(result);
+//    }
+//
+//    @GetMapping("/test/multiple")
+//    public ResponseEntity<ApiResponse<List<MemberResponse>>> testMultipleData() {
+//        List<MemberResponse> memberResponses = wordService.testMultipleData();
+//        return ApiResponse.success(memberResponses);
+//    }
 
     @GetMapping("/{word}")
     public ResponseEntity<ApiResponse<List<Map<String, Object>>>> findWord(@PathVariable("word") String word) {
