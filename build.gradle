@@ -4,7 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'org.eng-diary'
+group = 'org.eng_diary'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -50,17 +50,17 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-// 아래 전체 라인은 queryDSL 관련 설정
-def generated = 'src/main/generated'
+/* QueryDSL 설정 */
+def querydslDir = "$buildDir/generated/querydsl"
 
 tasks.withType(JavaCompile) {
-	options.getGeneratedSourceOutputDirectory().set(file(generated))
+	options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
 }
 
 sourceSets {
-	main.java.srcDirs += [ generated ]
+	main.java.srcDirs += [ querydslDir ]
 }
 
 clean {
-	delete file(generated)
+	delete file(querydslDir)
 }
