@@ -2,19 +2,19 @@ package org.eng_diary.api.business.word.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.eng_diary.api.domain.*;
+import org.eng_diary.api.entity.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static org.eng_diary.api.domain.QMember.member;
-import static org.eng_diary.api.domain.QMemberWord.memberWord;
-import static org.eng_diary.api.domain.QMemberWordCategory.memberWordCategory;
-import static org.eng_diary.api.domain.QMemberWordExample.memberWordExample;
-import static org.eng_diary.api.domain.QMemberWordKind.memberWordKind;
-import static org.eng_diary.api.domain.QMemberWordMeaning.memberWordMeaning;
-import static org.eng_diary.api.domain.QMemberWordPhonetic.memberWordPhonetic;
-import static org.eng_diary.api.domain.QWordOriginalData.*;
+import static org.eng_diary.api.entity.QMember.member;
+import static org.eng_diary.api.entity.QMemberWord.memberWord;
+import static org.eng_diary.api.entity.QMemberWordCategory.memberWordCategory;
+import static org.eng_diary.api.entity.QMemberWordExample.memberWordExample;
+import static org.eng_diary.api.entity.QMemberWordKind.memberWordKind;
+import static org.eng_diary.api.entity.QMemberWordMeaning.memberWordMeaning;
+import static org.eng_diary.api.entity.QMemberWordPhonetic.memberWordPhonetic;
+import static org.eng_diary.api.entity.QWordOriginalData.*;
 
 @Repository
 public class WordRepository {

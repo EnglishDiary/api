@@ -1,8 +1,8 @@
-package org.eng_diary.api.business.member.repository;
+package org.eng_diary.api.domain.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.eng_diary.api.domain.Member;
+import org.eng_diary.api.entity.Member;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,4 +1,4 @@
-package org.eng_diary.api.business.member.dto;
+package org.eng_diary.api.domain.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

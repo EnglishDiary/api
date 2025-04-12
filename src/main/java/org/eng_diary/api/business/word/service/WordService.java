@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eng_diary.api.business.word.dto.*;
 import org.eng_diary.api.business.word.repository.WordRepository;
-import org.eng_diary.api.domain.*;
+import org.eng_diary.api.entity.*;
 import org.eng_diary.api.exception.customError.BadRequestError;
 import org.eng_diary.api.exception.customError.OpenApiServerError;
 import org.eng_diary.api.util.JsonBuilder;

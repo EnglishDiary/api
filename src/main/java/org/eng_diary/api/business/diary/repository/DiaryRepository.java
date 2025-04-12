@@ -2,15 +2,15 @@ package org.eng_diary.api.business.diary.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.eng_diary.api.domain.Diary;
-import org.eng_diary.api.domain.OfficialDiaryCategory;
+import org.eng_diary.api.entity.Diary;
+import org.eng_diary.api.entity.OfficialDiaryCategory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static org.eng_diary.api.domain.QDiary.diary;
-import static org.eng_diary.api.domain.QMember.member;
-import static org.eng_diary.api.domain.QOfficialDiaryCategory.officialDiaryCategory;
+import static org.eng_diary.api.entity.QDiary.diary;
+import static org.eng_diary.api.entity.QMember.member;
+import static org.eng_diary.api.entity.QOfficialDiaryCategory.officialDiaryCategory;
 
 @Repository
 public class DiaryRepository {

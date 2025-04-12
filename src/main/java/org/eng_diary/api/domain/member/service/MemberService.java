@@ -1,9 +1,9 @@
-package org.eng_diary.api.business.member.service;
+package org.eng_diary.api.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.eng_diary.api.business.member.dto.SignupRequest;
-import org.eng_diary.api.business.member.repository.MemberRepository;
-import org.eng_diary.api.domain.Member;
+import org.eng_diary.api.domain.member.dto.SignupRequest;
+import org.eng_diary.api.domain.member.repository.MemberRepository;
+import org.eng_diary.api.entity.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

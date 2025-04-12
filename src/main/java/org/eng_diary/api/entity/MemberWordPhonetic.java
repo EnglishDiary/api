@@ -1,8 +1,7 @@
-package org.eng_diary.api.domain;
+package org.eng_diary.api.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.annotations.Fetch;
 
 @Entity
 @Getter
