@@ -1,7 +1,9 @@
 package org.eng_diary.api.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.eng_diary.api.domain.member.dto.SignupRequest;
+import org.eng_diary.api.business.word.dto.MemberResponse;
+import org.eng_diary.api.domain.member.dto.SignupForm;
+import org.eng_diary.api.domain.member.mapper.MemberMapper;
 import org.eng_diary.api.domain.member.repository.MemberRepository;
 import org.eng_diary.api.entity.Member;
 import org.springframework.stereotype.Service;
@@ -15,15 +17,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long signup(SignupRequest request) {
-        Member member = new Member();
+    public MemberResponse signup(SignupForm signupForm) {
+        Member member = MemberMapper.createMember(signupForm);
+        memberRepository.save(member);
 
-        member.setName(request.getNickname());
-        member.setRegistrationId(request.getUserId());
-        member.setProfileImageUrl(request.getProfileImageUrl());
-
-        memberRepository.saveMember(member);
-
-        return member.getId();
+        return MemberMapper.createMemberResponse(member);
     }
+
 }

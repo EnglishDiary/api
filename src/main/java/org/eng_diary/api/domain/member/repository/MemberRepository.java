@@ -1,22 +1,8 @@
 package org.eng_diary.api.domain.member.repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import org.eng_diary.api.entity.Member;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    private final EntityManager em;
-    private final JPAQueryFactory queryFactory;
-
-    public MemberRepository(EntityManager em) {
-        this.em = em;
-        this.queryFactory = new JPAQueryFactory(em);
-    }
-
-    public void saveMember(Member member) {
-        em.persist(member);
-    }
 }

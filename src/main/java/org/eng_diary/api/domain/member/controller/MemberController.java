@@ -2,8 +2,9 @@ package org.eng_diary.api.domain.member.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.eng_diary.api.business.word.dto.MemberResponse;
 import org.eng_diary.api.domain.member.dto.LoginRequest;
-import org.eng_diary.api.domain.member.dto.SignupRequest;
+import org.eng_diary.api.domain.member.dto.SignupForm;
 import org.eng_diary.api.domain.member.service.MemberService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<Long>> signup(@RequestBody @Valid SignupRequest request) {
-        Long memberId = memberService.signup(request);
-        return ApiResponse.success("회원가입에 성공하였습니다", memberId);
+    public ResponseEntity<ApiResponse<MemberResponse>> signup(@RequestBody @Valid SignupForm request) {
+        MemberResponse memberResponse = memberService.signup(request);
+        return ApiResponse.success("회원가입에 성공하였습니다", memberResponse);
     }
 
     @PostMapping("/login")
