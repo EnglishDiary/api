@@ -13,7 +13,7 @@ public class MemberMapper {
 
     public static MemberResponse createMemberResponse(Member member) {
         return MemberResponse.builder()
-                .id(member.getId())
+                .userId(member.getId())
                 .nickname(member.getNickname())
                 .build();
     }

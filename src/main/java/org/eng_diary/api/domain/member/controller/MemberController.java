@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.eng_diary.api.domain.member.dto.response.LoginRes;
 import org.eng_diary.api.domain.member.dto.response.MemberResponse;
 import org.eng_diary.api.domain.member.dto.request.LoginForm;
 import org.eng_diary.api.domain.member.dto.request.SignupForm;
@@ -31,7 +32,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<MemberResponse>> login(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<ApiResponse<LoginRes>> login(@RequestBody LoginForm loginForm) {
         return ApiResponse.success(memberService.login(loginForm));
     }
 

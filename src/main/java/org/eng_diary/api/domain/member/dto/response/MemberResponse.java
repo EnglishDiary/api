@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberResponse {
 
-    @Schema(name = "id", example = "1")
-    private Long id;
+    @Schema(name = "userId", example = "mytestId123")
+    private Long userId;
 
     @Schema(name = "nickname", example = "John Doe")
     private String nickname;
