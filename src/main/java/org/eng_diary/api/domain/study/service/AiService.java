@@ -1,6 +1,9 @@
 package org.eng_diary.api.domain.study.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.eng_diary.api.domain.study.dto.request.ScriptUploadForm;
 import org.eng_diary.api.domain.study.entity.Sentence;
 import org.eng_diary.api.domain.study.repository.SentenceRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +43,18 @@ public class AiService {
 
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
 
-        System.out.println(response);
+        String responseBody = response.getBody();
+
+        Map<String, Object> parsedResponse = null;
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            parsedResponse = objectMapper.readValue(responseBody, Map.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("디버깅");
     }
 
     private HttpEntity<Map<String, Object>> createRequestEntity(Sentence sentence) {
@@ -49,20 +63,16 @@ public class AiService {
         headers.set("Authorization", "Bearer " + apiKey);
         headers.set("Content-Type", "application/json");
 
-        String hardCodedSentence = "Hiccup (v.o.): This is Berk. It's twelve days north of Hopeless, and a few degrees south of Freezing to Death.";
+        String analysisTarget = "Janine: I'd say the main problem in this school district is, yeah, no money. Uh, the city says there isn't any, but they're doing a multimillion‐dollar renovation to the Eagles' stadium down the street from here. But we just make do. I mean, the staff here is incredible. They're all amazing teachers. I really look up to them all.";
 
         // 메시지 구성
-        String userMessage = "아래 영어문장을 전체적으로 분석해주세요(주목할 문법, 어려운 단어 혹은 숙어, 주요한 표현 위주로). 설정된 시스템메세지를 반드시 참고하여 답변하세요.\n\n" + sentence.getPassage();
+        String userMessage = "여기서 would는 어떤 뜻으로 사용된 거지? 그리고 look up to가 무슨 뜻이야?";
         String systemMessage = """
-            You are an AI assistant that helps Korean study English. Analyze the given English sentence or passage.
-            Provide your response in the following JSON format:
-            
-            {
-              "result": "여기에 마크다운 형식으로 영어 문장 분석 내용을 작성해주세요. 문장에 사용된 주요 문법, 어려운 단어, 숙어, 주요 표현 등을 설명해주세요."
-            }
-            
-            결과는 마크다운 형식으로 작성하고, 한국어로 설명해주세요. 전체 응답이 유효한 JSON 형식인지 확인하세요.
-        """;
+            분석할 영어문장: %s
+            컨텍스트:
+            - 영어학습자 수준: B1
+            - 미국드라마 애봇초등학교에 나오는 대사
+        """.formatted(analysisTarget);
 
         // 요청 바디 생성
         Map<String, Object> body = new HashMap<>();
@@ -75,6 +85,5 @@ public class AiService {
 
         return new HttpEntity<>(body, headers);
     }
-
 
 }
