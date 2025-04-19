@@ -1,6 +1,7 @@
 package org.eng_diary.api.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.eng_diary.api.common.context.UserContextHolder;
 import org.eng_diary.api.common.util.JwtTokenUtil;
 import org.eng_diary.api.domain.member.dto.response.LoginRes;
 import org.eng_diary.api.domain.member.dto.response.MemberResponse;
@@ -32,7 +33,7 @@ public class MemberService {
     }
 
     public LoginRes login(LoginForm loginForm) {
-        String userId = loginForm.memberId();
+        String userId = loginForm.loginId();
         System.out.println(userId);
 
         Map<String, Object> claims = new HashMap<>();
@@ -41,7 +42,14 @@ public class MemberService {
         System.out.println(token);
 
         return LoginRes.builder()
-                .jwt(token)
+                .accessToken(token)
                 .build();
+    }
+
+    public MemberResponse identifyUser() {
+        String userId = UserContextHolder.getUserId();
+
+        Member user = memberRepository.findByLoginId(userId);
+        return MemberMapper.createMemberResponse(user);
     }
 }

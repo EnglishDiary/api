@@ -11,14 +11,11 @@ import org.eng_diary.api.domain.member.dto.request.SignupForm;
 import org.eng_diary.api.domain.member.service.MemberService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/user")
 @Tag(name = "사용자 API", description = "사용자 관련 API")
 public class MemberController {
 
@@ -31,9 +28,16 @@ public class MemberController {
         return ApiResponse.success("회원가입에 성공하였습니다", memberResponse);
     }
 
+    @Operation(summary = "로그인")
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginRes>> login(@RequestBody LoginForm loginForm) {
         return ApiResponse.success(memberService.login(loginForm));
+    }
+
+    @Operation(summary = "내 정보 조회")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<MemberResponse>> identifyUser() {
+        return ApiResponse.success(memberService.identifyUser());
     }
 
 }

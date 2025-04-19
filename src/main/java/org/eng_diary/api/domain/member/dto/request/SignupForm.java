@@ -13,7 +13,7 @@ public class SignupForm {
     @Size(min = 5, max = 20, message = "아이디는 5자 이상 20자 이하여야 합니다.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-z\\d]{5,20}$",
             message = "아이디는 5자 이상 20자 이하의 영문 소문자와 숫자의 조합이어야 합니다.")
-    @Schema(name = "memberId", example = "John9422")
+    @Schema(name = "loginId", example = "John9422")
     private String memberId;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
