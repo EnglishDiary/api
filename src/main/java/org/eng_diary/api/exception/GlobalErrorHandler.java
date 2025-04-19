@@ -20,4 +20,6 @@ public class GlobalErrorHandler {
         return new ResponseEntity<>(error, INTERNAL_SERVER_ERROR);
     }
 
+    // TODO 250420 JWT 토큰 예외처리 (만료, 유효하지 않은 토큰값 등)
+
 }
