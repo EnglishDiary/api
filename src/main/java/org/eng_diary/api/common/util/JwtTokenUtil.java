@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,12 @@ public class JwtTokenUtil {
 
     public String extractUserId(String token) {
         final Claims claims = extractAllClaims(token);
-        return claims.getSubject();
+        String subject = claims.getSubject();   // loginId
+        if (StringUtils.isEmpty(subject)) {
+            throw new RuntimeException("failed to parse user id");
+        }
+
+        return subject;
     }
 
     private Claims extractAllClaims(String token) {
