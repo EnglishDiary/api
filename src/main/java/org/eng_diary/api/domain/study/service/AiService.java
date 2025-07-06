@@ -3,9 +3,11 @@ package org.eng_diary.api.domain.study.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.eng_diary.api.domain.study.dto.request.ScriptUploadForm;
-import org.eng_diary.api.domain.study.entity.Sentence;
-import org.eng_diary.api.domain.study.repository.SentenceRepository;
+import org.eng_diary.api.domain.study.dto.request.AiAskingForm;
+import org.eng_diary.api.domain.study.dto.response.AiAnswerRes;
+import org.eng_diary.api.domain.study.entity.*;
+import org.eng_diary.api.domain.study.mapper.StudyMapper;
+import org.eng_diary.api.domain.study.repository.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,19 +37,22 @@ public class AiService {
     private Integer maxTokens;
 
     private final RestTemplate restTemplate;
-
     private final SentenceRepository sentenceRepository;
+    private final ScriptRepository scriptRepository;
+    private final ChapterRepository chapterRepository;
+    private final TopicRepository topicRepository;
+    private final ConversationRepository conversationRepository;
 
-    public void studyExpression(Long sentenceId) {
-        Sentence sentence = sentenceRepository.findById(sentenceId).orElse(null);
-        HttpEntity<Map<String, Object>> requestEntity = createRequestEntity(sentence);
+    @Transactional
+    public AiAnswerRes askAiSentence(AiAskingForm aiAskingForm) {
+        HttpEntity<Map<String, Object>> requestEntity = createRequestEntity(aiAskingForm);
 
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
 
         String responseBody = response.getBody();
 
-        Map<String, Object> parsedResponse = null;
         ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> parsedResponse;
 
         try {
             parsedResponse = objectMapper.readValue(responseBody, Map.class);
@@ -54,25 +60,35 @@ public class AiService {
             throw new RuntimeException(e);
         }
 
-        System.out.println("디버깅");
+        List choices = (ArrayList) parsedResponse.get("choices");
+        Map firstChoice = (HashMap) choices.get(0);
+        Map message = (HashMap) firstChoice.get("message");
+        String aiAnswer = message.get("content").toString();
+
+        saveConversation(aiAskingForm, aiAnswer);
+
+        return AiAnswerRes.builder()
+                .answer(aiAnswer)
+                .build();
     }
 
-    private HttpEntity<Map<String, Object>> createRequestEntity(Sentence sentence) {
+    private void saveConversation(AiAskingForm aiAskingForm, String aiAnswer) {
+        Sentence sentence = sentenceRepository.findByIdOrThrow(aiAskingForm.sentenceId());
+
+        Conversation conversation = StudyMapper.createConversation(aiAskingForm, aiAnswer, sentence);
+        conversationRepository.save(conversation);
+    }
+
+    private HttpEntity<Map<String, Object>> createRequestEntity(AiAskingForm aiAskingForm) {
+
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiKey);
         headers.set("Content-Type", "application/json");
 
-        String analysisTarget = "Janine: I'd say the main problem in this school district is, yeah, no money. Uh, the city says there isn't any, but they're doing a multimillion‐dollar renovation to the Eagles' stadium down the street from here. But we just make do. I mean, the staff here is incredible. They're all amazing teachers. I really look up to them all.";
-
         // 메시지 구성
-        String userMessage = "여기서 would는 어떤 뜻으로 사용된 거지? 그리고 look up to가 무슨 뜻이야?";
-        String systemMessage = """
-            분석할 영어문장: %s
-            컨텍스트:
-            - 영어학습자 수준: B1
-            - 미국드라마 애봇초등학교에 나오는 대사
-        """.formatted(analysisTarget);
+        String userMessage = aiAskingForm.question();
+        String systemMessage = getSentenceContext(aiAskingForm);;
 
         // 요청 바디 생성
         Map<String, Object> body = new HashMap<>();
@@ -84,6 +100,35 @@ public class AiService {
         body.put("max_tokens", maxTokens);
 
         return new HttpEntity<>(body, headers);
+    }
+
+    private String getSentenceContext(AiAskingForm aiAskingForm) {
+        Sentence sentence = sentenceRepository.findByIdOrThrow(aiAskingForm.sentenceId());
+        Script script = scriptRepository.findById(aiAskingForm.scriptId())
+                .orElseThrow(() -> new RuntimeException("not existed script"));
+        Chapter chapter = chapterRepository.findById(aiAskingForm.chapterId())
+                .orElseThrow(() -> new RuntimeException("not existed chapter"));
+        Topic topic = topicRepository.findById(aiAskingForm.topicId())
+                .orElseThrow(() -> new RuntimeException("not existed topic"));
+
+        String analysisTarget = sentence.getPassage();
+        String topicDesc = topic.getDesc();
+        String chapterDesc = chapter.getDesc();
+        String scriptDesc = script.getDesc();
+
+        String sentenceContext = """            
+            분석할 영어문장: %s
+            
+            <사용자 제공 정보>
+            - 사용자의 영어수준: B1
+            - 대주제: %s
+            - 소주제: %s
+            - 현재 영어문장의 맥락: %s
+            
+            응답결과는 마크다운 형식으로 작성하고, 한국어로 설명해주세요.
+        """.formatted(analysisTarget, topicDesc, chapterDesc, scriptDesc);
+
+        return sentenceContext;
     }
 
 }

@@ -1,13 +1,13 @@
 package org.eng_diary.api.common.context;
 
 public class UserContextHolder {
-    private static final ThreadLocal<String> userContext = new ThreadLocal<>();
+    private static final ThreadLocal<UserContext> userContext = new ThreadLocal<>();
 
-    public static void setUserId(String userId) {
-        userContext.set(userId);
+    public static void setUserContext(UserContext user) {
+        userContext.set(user);
     }
 
-    public static String getUserId() {
+    public static UserContext getUserContext() {
         return userContext.get();
     }
 

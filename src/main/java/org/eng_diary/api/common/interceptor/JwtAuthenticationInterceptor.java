@@ -1,8 +1,10 @@
 package org.eng_diary.api.common.interceptor;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.eng_diary.api.common.context.UserContext;
 import org.eng_diary.api.common.context.UserContextHolder;
 import org.eng_diary.api.common.util.JwtTokenUtil;
 import org.springframework.stereotype.Component;
@@ -25,8 +27,17 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             String jwt = authHeader.substring(7);
 
             if (jwtTokenUtil.validateToken(jwt)) {
-                String userId = jwtTokenUtil.extractUserId(jwt);
-                UserContextHolder.setUserId(userId);
+                Claims claims = jwtTokenUtil.extractAllClaims(jwt);
+
+                String loginId = claims.getSubject();
+                Long memberId = Long.parseLong(claims.get("memberId").toString());
+
+                UserContext user = UserContext.builder()
+                        .loginId(loginId)
+                        .memberId(memberId)
+                        .build();
+
+                UserContextHolder.setUserContext(user);
                 return true;
             }
         }

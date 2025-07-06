@@ -5,8 +5,10 @@ import org.eng_diary.api.domain.member.dto.request.SignupForm;
 import org.eng_diary.api.entity.Member;
 
 public class MemberMapper {
-    public static Member createMember(SignupForm signupForm) {
+    public static Member createMember(SignupForm signupForm, String encodedPassword) {
         return Member.builder()
+                .loginId(signupForm.getMemberId())
+                .password(encodedPassword)
                 .nickname(signupForm.getNickname())
                 .build();
     }

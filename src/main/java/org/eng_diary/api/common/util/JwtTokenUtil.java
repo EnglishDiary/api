@@ -28,17 +28,17 @@ public class JwtTokenUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractUserId(String token) {
-        final Claims claims = extractAllClaims(token);
-        String subject = claims.getSubject();   // loginId
-        if (StringUtils.isEmpty(subject)) {
-            throw new RuntimeException("failed to parse user id");
-        }
+//    public String extractUserId(String token) {
+//        final Claims claims = extractAllClaims(token);
+//        String subject = claims.getSubject();   // loginId
+//        if (StringUtils.isEmpty(subject)) {
+//            throw new RuntimeException("failed to parse user id");
+//        }
+//
+//        return subject;
+//    }
 
-        return subject;
-    }
-
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
@@ -56,10 +56,6 @@ public class JwtTokenUtil {
 
     // 추가 클레임을 포함한 토큰 생성
     public String generateToken(Map<String, Object> claims, String userId) {
-        return createToken(claims, userId);
-    }
-
-    private String createToken(Map<String, Object> claims, String userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
 

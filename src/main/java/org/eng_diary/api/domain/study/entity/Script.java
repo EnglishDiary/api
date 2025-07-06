@@ -3,6 +3,8 @@ package org.eng_diary.api.domain.study.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,5 +19,11 @@ public class Script {
 
     @Column(name = "script_content")
     private String content;
+
+    @Column(name = "script_desc")
+    private String desc;
+
+    @OneToMany(mappedBy = "script")
+    private List<Sentence> sentences;
 
 }

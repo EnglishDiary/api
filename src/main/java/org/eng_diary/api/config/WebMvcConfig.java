@@ -34,8 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**") // API 경로에 인터셉터 적용
                 // 공개 API 제외
                 .excludePathPatterns("/user/login")
-        ;
-//                .excludePathPatterns("/user/me");
+                .excludePathPatterns("/user/signup");
     }
 
 }
