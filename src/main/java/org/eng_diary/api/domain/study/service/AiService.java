@@ -115,20 +115,25 @@ public class AiService {
         String topicDesc = topic.getDesc();
         String chapterDesc = chapter.getDesc();
         String scriptDesc = script.getDesc();
+        List<String> linkedSentences = aiAskingForm.linkedSentences();
 
-        String sentenceContext = """            
-            분석할 영어문장: %s
-            
-            <사용자 제공 정보>
-            - 사용자의 영어수준: B1
-            - 대주제: %s
-            - 소주제: %s
-            - 현재 영어문장의 맥락: %s
-            
-            응답결과는 마크다운 형식으로 작성하고, 한국어로 설명해주세요.
-        """.formatted(analysisTarget, topicDesc, chapterDesc, scriptDesc);
+        StringBuilder linkedSentencesResult = new StringBuilder();
+        for (String linkedSentence : linkedSentences) {
+            linkedSentencesResult.append(linkedSentence).append("\n");
+        }
 
-        return sentenceContext;
+        return """            
+분석할 영어문장: %s
+
+<사용자 제공 정보>
+- 사용자의 영어수준: B1
+- 대주제: %s
+- 소주제: %s
+- 현재 영어문장의 맥락: %s
+- 이전 혹은 다음 문장을 함께 포함한 결과: %s
+
+응답결과는 마크다운 형식으로 작성하고, 한국어로 설명해주세요.
+""".formatted(analysisTarget, topicDesc, chapterDesc, scriptDesc, linkedSentencesResult.toString());
     }
 
 }
