@@ -3,7 +3,7 @@ package org.eng_diary.api.domain.study.service;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.common.context.UserContext;
 import org.eng_diary.api.common.context.UserContextHolder;
-import org.eng_diary.api.domain.member.service.MemberService;
+import org.eng_diary.api.domain.member.service.AuthService;
 import org.eng_diary.api.domain.study.dto.request.ChapterSaveForm;
 import org.eng_diary.api.domain.study.dto.request.ScriptUploadForm;
 import org.eng_diary.api.domain.study.dto.request.TopicSaveForm;
@@ -26,7 +26,7 @@ public class StudyService {
 
     private final StudyQueryRepository studyQueryRepository;
     private final TopicRepository topicRepository;
-    private final MemberService memberService;
+    private final AuthService authService;
     private final ChapterRepository chapterRepository;
     private final ScriptRepository scriptRepository;
     private final SentenceRepository sentenceRepository;
@@ -63,7 +63,7 @@ public class StudyService {
 
     @Transactional
     public TopicRes saveTopic(TopicSaveForm topicSaveForm) {
-        Member currentUser = memberService.getCurrentUser();
+        Member currentUser = authService.getCurrentUser();
 
         Topic topic = StudyMapper.createTopic(topicSaveForm, currentUser);
         topicRepository.save(topic);
@@ -106,5 +106,19 @@ public class StudyService {
     }
 
 
+    @Transactional
+    public Integer saveBookmark(Long chapterId, Integer bookmarkIndex) {
+        Chapter chapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new RuntimeException("not existed chapter"));
 
+        chapter.updateBookmark(bookmarkIndex);
+        return bookmarkIndex;
+    }
+
+    public ChapterRes getChapter(Long chapterId) {
+        Chapter chapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new RuntimeException("not existed chapter"));
+
+        return StudyMapper.createChapterRes(chapter);
+    }
 }

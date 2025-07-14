@@ -37,6 +37,7 @@ public class StudyMapper {
                 .scriptId(Optional.ofNullable(chapter.getScript())
                         .map(Script::getId)
                         .orElse(null))
+                .bookmarkIndex(chapter.getBookmarkIndex())
                 .build();
     }
 

@@ -68,4 +68,16 @@ public class StudyController {
         return ApiResponse.success(studyService.getConversations(sentenceId));
     }
 
+    @PostMapping("/chapter/{chapterId}/bookmark/{bookmarkIndex}")
+    public ResponseEntity<ApiResponse<Integer>> saveBookmark(
+            @PathVariable(name = "chapterId") Long chapterId,
+            @PathVariable(name = "bookmarkIndex") Integer bookmarkIndex) {
+        return ApiResponse.success(studyService.saveBookmark(chapterId, bookmarkIndex));
+    }
+
+    @GetMapping("/chapter/{chapterId}")
+    public ResponseEntity<ApiResponse<ChapterRes>> getChapter(@PathVariable(name = "chapterId") Long chapterId) {
+        return ApiResponse.success(studyService.getChapter(chapterId));
+    }
+
 }
