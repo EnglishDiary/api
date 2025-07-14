@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static org.eng_diary.api.entity.QComposition.composition;
-import static org.eng_diary.api.entity.QExpression.expression;
-import static org.eng_diary.api.entity.QMember.member;
+import static org.eng_diary.api.business.auth.entity.QMember.member;
+import static org.eng_diary.api.business.expression.entity.QComposition.composition;
+import static org.eng_diary.api.business.expression.entity.QExpression.expression;
 
 
 @Repository

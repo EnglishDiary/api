@@ -8,13 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static org.eng_diary.api.entity.QMember.member;
-import static org.eng_diary.api.entity.QMemberWord.memberWord;
-import static org.eng_diary.api.entity.QMemberWordCategory.memberWordCategory;
-import static org.eng_diary.api.entity.QMemberWordExample.memberWordExample;
-import static org.eng_diary.api.entity.QMemberWordKind.memberWordKind;
-import static org.eng_diary.api.entity.QMemberWordMeaning.memberWordMeaning;
-import static org.eng_diary.api.entity.QWordOriginalData.*;
+import static org.eng_diary.api.business.auth.entity.QMember.member;
+import static org.eng_diary.api.business.word.entity.QMemberWord.memberWord;
+import static org.eng_diary.api.business.word.entity.QMemberWordCategory.memberWordCategory;
+import static org.eng_diary.api.business.word.entity.QMemberWordExample.memberWordExample;
+import static org.eng_diary.api.business.word.entity.QMemberWordKind.memberWordKind;
+import static org.eng_diary.api.business.word.entity.QMemberWordMeaning.memberWordMeaning;
+import static org.eng_diary.api.business.word.entity.QWordOriginalData.wordOriginalData;
+
 
 @Repository
 public class WordRepository {

@@ -6,7 +6,8 @@ import org.eng_diary.api.business.member.payload.CategoryData;
 import org.eng_diary.api.business.word.entity.MemberWordCategory;
 import org.springframework.stereotype.Repository;
 
-import static org.eng_diary.api.entity.QMemberWordCategory.memberWordCategory;
+import static org.eng_diary.api.business.word.entity.QMemberWordCategory.memberWordCategory;
+
 
 @Repository
 public class MemberRepository {

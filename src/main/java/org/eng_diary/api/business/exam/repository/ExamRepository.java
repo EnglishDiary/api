@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static org.eng_diary.api.entity.QExamSentence.examSentence;
-import static org.eng_diary.api.entity.QExamSet.examSet;
+import static org.eng_diary.api.business.exam.entity.QExamSentence.examSentence;
+import static org.eng_diary.api.business.exam.entity.QExamSet.examSet;
 
 
 @Repository
