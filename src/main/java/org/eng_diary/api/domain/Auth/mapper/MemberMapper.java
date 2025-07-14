@@ -1,7 +1,7 @@
-package org.eng_diary.api.domain.member.mapper;
+package org.eng_diary.api.domain.Auth.mapper;
 
-import org.eng_diary.api.domain.member.dto.response.MemberResponse;
-import org.eng_diary.api.domain.member.dto.request.SignupForm;
+import org.eng_diary.api.domain.Auth.dto.response.MemberResponse;
+import org.eng_diary.api.domain.Auth.dto.request.SignupForm;
 import org.eng_diary.api.entity.Member;
 
 public class MemberMapper {
