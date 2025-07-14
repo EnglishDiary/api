@@ -8,7 +8,7 @@ import org.eng_diary.api.business.expression.payload.*;
 import org.eng_diary.api.business.expression.repository.ExpressionRepository;
 import org.eng_diary.api.entity.Composition;
 import org.eng_diary.api.entity.Expression;
-import org.eng_diary.api.domain.auth.dto.response.UserDTO;
+import org.eng_diary.api.business.auth.dto.response.UserDTO;
 import org.eng_diary.api.entity.Member;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
