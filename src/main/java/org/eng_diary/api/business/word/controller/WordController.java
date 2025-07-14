@@ -3,7 +3,7 @@ package org.eng_diary.api.business.word.controller;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.word.dto.*;
 import org.eng_diary.api.business.word.service.WordService;
-import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

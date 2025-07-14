@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.exam.payload.ExamSentenceDTO;
 import org.eng_diary.api.business.exam.payload.ExamSentencesRequest;
 import org.eng_diary.api.business.exam.repository.ExamRepository;
-import org.eng_diary.api.entity.ExamSentence;
+import org.eng_diary.api.business.exam.entity.ExamSentence;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

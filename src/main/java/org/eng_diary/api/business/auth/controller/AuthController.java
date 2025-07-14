@@ -9,7 +9,7 @@ import org.eng_diary.api.business.auth.dto.response.MemberResponse;
 import org.eng_diary.api.business.auth.dto.request.LoginForm;
 import org.eng_diary.api.business.auth.dto.request.SignupForm;
 import org.eng_diary.api.business.auth.service.AuthService;
-import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

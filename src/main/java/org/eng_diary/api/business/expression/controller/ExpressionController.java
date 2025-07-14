@@ -6,7 +6,7 @@ import org.eng_diary.api.business.expression.payload.CompositionRequest;
 import org.eng_diary.api.business.expression.payload.ExpressionDTO;
 import org.eng_diary.api.business.expression.payload.ExpressionSaveRequest;
 import org.eng_diary.api.business.expression.service.ExpressionService;
-import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.common.dto.ApiResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

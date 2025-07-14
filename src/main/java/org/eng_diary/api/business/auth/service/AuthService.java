@@ -10,7 +10,7 @@ import org.eng_diary.api.business.auth.dto.request.LoginForm;
 import org.eng_diary.api.business.auth.dto.request.SignupForm;
 import org.eng_diary.api.business.auth.mapper.MemberMapper;
 import org.eng_diary.api.business.auth.repository.AuthRepository;
-import org.eng_diary.api.entity.Member;
+import org.eng_diary.api.business.auth.entity.Member;
 import org.eng_diary.api.exception.customError.BadRequestError;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package org.eng_diary.api.business.member.controller;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.member.payload.CategoryUpdateRequest;
 import org.eng_diary.api.business.member.service.MemberService;
-import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package org.eng_diary.api.entity;
+package org.eng_diary.api.common.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

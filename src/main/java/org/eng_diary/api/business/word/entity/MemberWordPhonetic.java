@@ -1,4 +1,4 @@
-package org.eng_diary.api.entity;
+package org.eng_diary.api.business.word.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

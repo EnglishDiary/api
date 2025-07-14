@@ -3,8 +3,8 @@ package org.eng_diary.api.business.expression.repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.eng_diary.api.entity.Composition;
-import org.eng_diary.api.entity.Expression;
+import org.eng_diary.api.business.expression.entity.Composition;
+import org.eng_diary.api.business.expression.entity.Expression;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 

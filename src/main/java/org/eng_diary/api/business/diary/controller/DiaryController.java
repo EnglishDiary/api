@@ -3,7 +3,7 @@ package org.eng_diary.api.business.diary.controller;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.diary.dto.*;
 import org.eng_diary.api.business.diary.service.DiaryService;
-import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

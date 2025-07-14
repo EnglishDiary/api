@@ -6,7 +6,7 @@ import org.eng_diary.api.business.study.dto.request.ScriptUploadForm;
 import org.eng_diary.api.business.study.dto.request.TopicSaveForm;
 import org.eng_diary.api.business.study.dto.response.*;
 import org.eng_diary.api.business.study.entity.*;
-import org.eng_diary.api.entity.Member;
+import org.eng_diary.api.business.auth.entity.Member;
 
 import java.util.List;
 import java.util.Optional;

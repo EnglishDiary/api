@@ -2,7 +2,7 @@ package org.eng_diary.api.business.auth.mapper;
 
 import org.eng_diary.api.business.auth.dto.response.MemberResponse;
 import org.eng_diary.api.business.auth.dto.request.SignupForm;
-import org.eng_diary.api.entity.Member;
+import org.eng_diary.api.business.auth.entity.Member;
 
 public class MemberMapper {
     public static Member createMember(SignupForm signupForm, String encodedPassword) {

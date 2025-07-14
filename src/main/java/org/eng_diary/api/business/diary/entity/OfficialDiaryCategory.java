@@ -1,4 +1,4 @@
-package org.eng_diary.api.entity;
+package org.eng_diary.api.business.diary.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

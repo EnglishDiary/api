@@ -2,7 +2,7 @@ package org.eng_diary.api.business.study.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.eng_diary.api.entity.BaseEntity;
+import org.eng_diary.api.common.entity.BaseEntity;
 
 @Entity
 @Builder

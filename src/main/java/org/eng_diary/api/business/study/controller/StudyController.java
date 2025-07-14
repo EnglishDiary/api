@@ -8,7 +8,7 @@ import org.eng_diary.api.business.study.dto.request.TopicSaveForm;
 import org.eng_diary.api.business.study.dto.response.*;
 import org.eng_diary.api.business.study.service.AiService;
 import org.eng_diary.api.business.study.service.StudyService;
-import org.eng_diary.api.dto.ApiResponse;
+import org.eng_diary.api.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

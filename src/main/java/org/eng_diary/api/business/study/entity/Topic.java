@@ -3,7 +3,7 @@ package org.eng_diary.api.business.study.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.eng_diary.api.entity.Member;
+import org.eng_diary.api.business.auth.entity.Member;
 
 @Entity
 @Getter

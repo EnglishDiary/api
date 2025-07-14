@@ -1,8 +1,9 @@
-package org.eng_diary.api.entity;
+package org.eng_diary.api.business.word.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.eng_diary.api.business.auth.entity.Member;
 
 import java.time.LocalDateTime;
 import java.util.List;

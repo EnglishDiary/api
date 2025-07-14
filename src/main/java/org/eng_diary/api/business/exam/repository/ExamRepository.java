@@ -4,8 +4,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.eng_diary.api.business.exam.payload.ExamSentencesRequest;
-import org.eng_diary.api.entity.ExamSentence;
-import org.eng_diary.api.entity.ExamSet;
+import org.eng_diary.api.business.exam.entity.ExamSentence;
+import org.eng_diary.api.business.exam.entity.ExamSet;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

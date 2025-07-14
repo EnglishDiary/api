@@ -1,7 +1,8 @@
-package org.eng_diary.api.entity;
+package org.eng_diary.api.business.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.eng_diary.api.common.entity.BaseEntity;
 
 @Entity
 @Builder

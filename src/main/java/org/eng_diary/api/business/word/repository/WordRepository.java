@@ -2,7 +2,8 @@ package org.eng_diary.api.business.word.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.eng_diary.api.entity.*;
+import org.eng_diary.api.business.auth.entity.Member;
+import org.eng_diary.api.business.word.entity.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +14,6 @@ import static org.eng_diary.api.entity.QMemberWordCategory.memberWordCategory;
 import static org.eng_diary.api.entity.QMemberWordExample.memberWordExample;
 import static org.eng_diary.api.entity.QMemberWordKind.memberWordKind;
 import static org.eng_diary.api.entity.QMemberWordMeaning.memberWordMeaning;
-import static org.eng_diary.api.entity.QMemberWordPhonetic.memberWordPhonetic;
 import static org.eng_diary.api.entity.QWordOriginalData.*;
 
 @Repository

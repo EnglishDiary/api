@@ -14,7 +14,7 @@ import org.eng_diary.api.business.study.dto.response.ConversationRes;
 import org.eng_diary.api.business.study.dto.response.ScriptRes;
 import org.eng_diary.api.business.study.dto.response.TopicRes;
 import org.eng_diary.api.business.study.mapper.StudyMapper;
-import org.eng_diary.api.entity.Member;
+import org.eng_diary.api.business.auth.entity.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

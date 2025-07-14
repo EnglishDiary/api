@@ -1,4 +1,4 @@
-package org.eng_diary.api.dto;
+package org.eng_diary.api.common.dto;
 
 import lombok.Getter;
 import org.eng_diary.api.util.PageInfo;
