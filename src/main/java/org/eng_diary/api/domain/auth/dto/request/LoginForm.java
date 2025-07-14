@@ -1,4 +1,4 @@
-package org.eng_diary.api.domain.Auth.dto.request;
+package org.eng_diary.api.domain.auth.dto.request;
 
 public record LoginForm(
         String loginId,

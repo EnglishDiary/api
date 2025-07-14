@@ -1,14 +1,14 @@
-package org.eng_diary.api.domain.Auth.controller;
+package org.eng_diary.api.domain.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.eng_diary.api.domain.Auth.dto.response.LoginRes;
-import org.eng_diary.api.domain.Auth.dto.response.MemberResponse;
-import org.eng_diary.api.domain.Auth.dto.request.LoginForm;
-import org.eng_diary.api.domain.Auth.dto.request.SignupForm;
-import org.eng_diary.api.domain.Auth.service.AuthService;
+import org.eng_diary.api.domain.auth.dto.response.LoginRes;
+import org.eng_diary.api.domain.auth.dto.response.MemberResponse;
+import org.eng_diary.api.domain.auth.dto.request.LoginForm;
+import org.eng_diary.api.domain.auth.dto.request.SignupForm;
+import org.eng_diary.api.domain.auth.service.AuthService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

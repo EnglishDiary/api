@@ -2,7 +2,7 @@ package org.eng_diary.api.business.expression.payload;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.eng_diary.api.domain.Auth.dto.response.UserDTO;
+import org.eng_diary.api.domain.auth.dto.response.UserDTO;
 
 import java.util.List;
 

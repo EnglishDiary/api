@@ -1,4 +1,4 @@
-package org.eng_diary.api.domain.Auth.dto.response;
+package org.eng_diary.api.domain.auth.dto.response;
 
 import lombok.Builder;
 

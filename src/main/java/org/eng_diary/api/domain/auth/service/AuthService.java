@@ -1,15 +1,15 @@
-package org.eng_diary.api.domain.Auth.service;
+package org.eng_diary.api.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.common.context.UserContext;
 import org.eng_diary.api.common.context.UserContextHolder;
 import org.eng_diary.api.common.util.JwtTokenUtil;
-import org.eng_diary.api.domain.Auth.dto.response.LoginRes;
-import org.eng_diary.api.domain.Auth.dto.response.MemberResponse;
-import org.eng_diary.api.domain.Auth.dto.request.LoginForm;
-import org.eng_diary.api.domain.Auth.dto.request.SignupForm;
-import org.eng_diary.api.domain.Auth.mapper.MemberMapper;
-import org.eng_diary.api.domain.Auth.repository.AuthRepository;
+import org.eng_diary.api.domain.auth.dto.response.LoginRes;
+import org.eng_diary.api.domain.auth.dto.response.MemberResponse;
+import org.eng_diary.api.domain.auth.dto.request.LoginForm;
+import org.eng_diary.api.domain.auth.dto.request.SignupForm;
+import org.eng_diary.api.domain.auth.mapper.MemberMapper;
+import org.eng_diary.api.domain.auth.repository.AuthRepository;
 import org.eng_diary.api.entity.Member;
 import org.eng_diary.api.exception.customError.BadRequestError;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

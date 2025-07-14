@@ -3,7 +3,7 @@ package org.eng_diary.api.domain.study.service;
 import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.common.context.UserContext;
 import org.eng_diary.api.common.context.UserContextHolder;
-import org.eng_diary.api.domain.Auth.service.AuthService;
+import org.eng_diary.api.domain.auth.service.AuthService;
 import org.eng_diary.api.domain.study.dto.request.ChapterSaveForm;
 import org.eng_diary.api.domain.study.dto.request.ScriptUploadForm;
 import org.eng_diary.api.domain.study.dto.request.TopicSaveForm;

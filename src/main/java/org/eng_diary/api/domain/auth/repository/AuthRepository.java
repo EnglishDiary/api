@@ -1,4 +1,4 @@
-package org.eng_diary.api.domain.Auth.repository;
+package org.eng_diary.api.domain.auth.repository;
 
 import org.eng_diary.api.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
