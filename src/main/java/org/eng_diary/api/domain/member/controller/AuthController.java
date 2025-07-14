@@ -8,7 +8,7 @@ import org.eng_diary.api.domain.member.dto.response.LoginRes;
 import org.eng_diary.api.domain.member.dto.response.MemberResponse;
 import org.eng_diary.api.domain.member.dto.request.LoginForm;
 import org.eng_diary.api.domain.member.dto.request.SignupForm;
-import org.eng_diary.api.domain.member.service.MemberService;
+import org.eng_diary.api.domain.member.service.AuthService;
 import org.eng_diary.api.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,27 +17,27 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 @Tag(name = "사용자 API", description = "사용자 관련 API")
-public class MemberController {
+public class AuthController {
 
-    private final MemberService memberService;
+    private final AuthService authService;
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<MemberResponse>> signup(@RequestBody @Valid SignupForm signupForm) {
-        MemberResponse memberResponse = memberService.signup(signupForm);
+        MemberResponse memberResponse = authService.signup(signupForm);
         return ApiResponse.success("회원가입에 성공하였습니다", memberResponse);
     }
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginRes>> login(@RequestBody LoginForm loginForm) {
-        return ApiResponse.success(memberService.login(loginForm));
+        return ApiResponse.success(authService.login(loginForm));
     }
 
     @Operation(summary = "내 정보 조회")
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<MemberResponse>> identifyUser() {
-        return ApiResponse.success(memberService.identifyUser());
+        return ApiResponse.success(authService.identifyUser());
     }
 
 }

@@ -16,5 +16,7 @@ public class MemberWordCategory {
 
     private String categoryName;
 
-    private Long categoryOwnerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_owner_id")
+    private Member member;
 }

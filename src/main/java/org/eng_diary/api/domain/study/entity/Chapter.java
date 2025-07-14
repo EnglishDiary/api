@@ -30,8 +30,15 @@ public class Chapter {
     @JoinColumn(name = "script_id")
     private Script script;
 
+    @Column(name = "bookmark_index")
+    private Integer bookmarkIndex;
+
     public void updateScript(Script script) {
         this.script = script;
+    }
+
+    public void updateBookmark(Integer bookmarkIndex) {
+        this.bookmarkIndex = bookmarkIndex;
     }
 
 }

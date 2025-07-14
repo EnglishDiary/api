@@ -100,7 +100,7 @@ public class WordRepository {
 
     public List<MemberWordCategory> findMemberCategories(Long memberId) {
         return queryFactory.selectFrom(memberWordCategory)
-                .where(memberWordCategory.categoryOwnerId.eq(memberId))
+                .where(memberWordCategory.member.id.eq(memberId))
                 .fetch();
     }
 

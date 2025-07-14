@@ -1,7 +1,6 @@
 package org.eng_diary.api.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.eng_diary.api.common.context.UserContext;
 import org.eng_diary.api.common.context.UserContextHolder;
 import org.eng_diary.api.common.util.JwtTokenUtil;
@@ -10,7 +9,7 @@ import org.eng_diary.api.domain.member.dto.response.MemberResponse;
 import org.eng_diary.api.domain.member.dto.request.LoginForm;
 import org.eng_diary.api.domain.member.dto.request.SignupForm;
 import org.eng_diary.api.domain.member.mapper.MemberMapper;
-import org.eng_diary.api.domain.member.repository.MemberRepository;
+import org.eng_diary.api.domain.member.repository.AuthRepository;
 import org.eng_diary.api.entity.Member;
 import org.eng_diary.api.exception.customError.BadRequestError;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,9 +22,9 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService {
+public class AuthService {
 
-    private final MemberRepository memberRepository;
+    private final AuthRepository authRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -34,14 +33,14 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(signupForm.getPassword());
 
         Member member = MemberMapper.createMember(signupForm, encodedPassword);
-        memberRepository.save(member);
+        authRepository.save(member);
 
         return MemberMapper.createMemberResponse(member);
     }
 
     public LoginRes login(LoginForm loginForm) {
         String userId = loginForm.loginId();
-        Member user = memberRepository.findByLoginId(userId);
+        Member user = authRepository.findByLoginId(userId);
 
         if (user == null) {
             throw new BadRequestError("not existed user");
@@ -65,14 +64,14 @@ public class MemberService {
     public MemberResponse identifyUser() {
         UserContext userContext = UserContextHolder.getUserContext();
 
-        Member user = memberRepository.findByLoginId(userContext.loginId());
+        Member user = authRepository.findByLoginId(userContext.loginId());
         return MemberMapper.createMemberResponse(user);
     }
 
     public Member getCurrentUser() {
         UserContext userContext = UserContextHolder.getUserContext();
 
-        return memberRepository.findById(userContext.memberId())
+        return authRepository.findById(userContext.memberId())
                 .orElseThrow(() -> new RuntimeException("not existed user"));
     }
 }

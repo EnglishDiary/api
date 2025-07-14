@@ -7,6 +7,7 @@ public record ChapterRes(
         Long id,
         String name,
         String desc,
-        Long scriptId
+        Long scriptId,
+        Integer bookmarkIndex
 ) {
 }

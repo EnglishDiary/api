@@ -1,13 +1,18 @@
 package org.eng_diary.api.dto;
 
 import lombok.Getter;
+import org.eng_diary.api.util.PageInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 @Getter
 public class ApiResponse<T> {
     private final boolean status;
     private final String message;
     private final T data;
+    private PageInfo pageInfo;
 
     private ApiResponse(boolean status, String message, T data) {
         this.status = status;
@@ -33,6 +38,17 @@ public class ApiResponse<T> {
     // 에러 응답 생성
     public static <T> ApiResponse<T> error(String message) {
         return new ApiResponse<>(false, message, null);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<List<T>>> successWithPaging(Page<T> page) {
+        return ResponseEntity.ok(new ApiResponse<>(true, "성공", page.getContent(), PageInfo.fromPage(page)));
+    }
+
+    private ApiResponse(boolean status, String message, T data, PageInfo pageInfo) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+        this.pageInfo = pageInfo;
     }
 
 }
