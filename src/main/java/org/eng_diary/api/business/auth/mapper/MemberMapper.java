@@ -10,6 +10,7 @@ public class MemberMapper {
                 .loginId(signupForm.getMemberId())
                 .password(encodedPassword)
                 .nickname(signupForm.getNickname())
+                .profileUrl(signupForm.getProfileUrl())
                 .build();
     }
 

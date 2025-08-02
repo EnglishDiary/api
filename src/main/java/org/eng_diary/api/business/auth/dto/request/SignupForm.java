@@ -17,7 +17,7 @@ public class SignupForm {
     private String memberId;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-    @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다.")
+    @Size(min = 6, message = "비밀번호는 6자 이상이어야 합니다.")
     @Schema(name = "password", example = "abc123@@")
     private String password;
 
@@ -28,6 +28,7 @@ public class SignupForm {
     @Schema(name = "nickname", example = "John Doe")
     private String nickname;
 
-    private String profileImageUrl;
+    // TODO: 유효성 검사
+    private String profileUrl;
 
 }

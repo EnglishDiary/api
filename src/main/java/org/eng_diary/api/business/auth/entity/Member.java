@@ -25,6 +25,7 @@ public class Member extends BaseEntity {
     @Column(name = "nickname")
     private String nickname;
 
-//    private String profileImageUrl;
+    @Column(name = "profile_url")
+    private String profileUrl;
 
 }
