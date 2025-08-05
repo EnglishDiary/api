@@ -2,6 +2,7 @@ package org.eng_diary.api.business.diary.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.eng_diary.api.business.filemanage.entity.EntityFileRelation;
 import org.eng_diary.api.common.entity.BaseEntity;
 import org.eng_diary.api.business.auth.entity.Member;
 
@@ -40,4 +41,9 @@ public class Diary extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "official_diary_category_id")
     private OfficialDiaryCategory officialDiaryCategory;
+
+    @OneToOne
+    @JoinColumn(name = "relation_id")
+    private EntityFileRelation entityFileRelation;
+
 }
