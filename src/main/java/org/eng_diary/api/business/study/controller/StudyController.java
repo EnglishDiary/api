@@ -1,14 +1,15 @@
 package org.eng_diary.api.business.study.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.eng_diary.api.business.study.dto.request.AiAskingForm;
-import org.eng_diary.api.business.study.dto.request.ChapterSaveForm;
-import org.eng_diary.api.business.study.dto.request.ScriptUploadForm;
-import org.eng_diary.api.business.study.dto.request.TopicSaveForm;
+import org.eng_diary.api.business.study.dto.request.*;
 import org.eng_diary.api.business.study.dto.response.*;
 import org.eng_diary.api.business.study.service.AiService;
 import org.eng_diary.api.business.study.service.StudyService;
+import org.eng_diary.api.business.study.service.TextToSpeechService;
 import org.eng_diary.api.common.dto.ApiResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class StudyController {
 
     private final AiService aiService;
     private final StudyService studyService;
+    private final TextToSpeechService textToSpeechService;
 
     @PostMapping("/ai/asking")
     public ResponseEntity<ApiResponse<AiAnswerRes>> askAiSentence(@RequestBody AiAskingForm aiAskingForm) {
@@ -78,6 +80,27 @@ public class StudyController {
     @GetMapping("/chapter/{chapterId}")
     public ResponseEntity<ApiResponse<ChapterRes>> getChapter(@PathVariable(name = "chapterId") Long chapterId) {
         return ApiResponse.success(studyService.getChapter(chapterId));
+    }
+
+    @PostMapping("/tts/synthesize")
+    public ResponseEntity<byte[]> synthesizeSpeech(@RequestBody TtsRequest request) {
+        try {
+            byte[] audioContent = textToSpeechService.synthesizeSpeech(
+                    request.getText(),
+                    request.getLanguageCode()
+            );
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("audio/mpeg"));
+            headers.setContentDispositionFormData("attachment", "speech.mp3");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(audioContent);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }
