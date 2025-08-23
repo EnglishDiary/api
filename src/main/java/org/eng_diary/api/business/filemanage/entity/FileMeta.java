@@ -1,11 +1,14 @@
 package org.eng_diary.api.business.filemanage.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Table(name = "file_meta")
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FileMeta {
 
     @Id

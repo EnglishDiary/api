@@ -4,12 +4,14 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eng_diary.api.common.context.UserContext;
 import org.eng_diary.api.common.context.UserContextHolder;
 import org.eng_diary.api.common.util.JwtTokenUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationInterceptor implements HandlerInterceptor {
@@ -42,6 +44,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             }
         }
 
+        log.error("Unauthorized Request");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return false;
     }

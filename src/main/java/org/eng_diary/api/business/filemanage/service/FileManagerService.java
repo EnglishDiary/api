@@ -1,7 +1,6 @@
 package org.eng_diary.api.business.filemanage.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.eng_diary.api.business.filemanage.dao.EntityFileRelationJpaRepository;
 import org.eng_diary.api.business.filemanage.dao.FileMetaJpaRepository;
 import org.eng_diary.api.business.filemanage.dto.response.FileMetaResponse;
@@ -11,6 +10,7 @@ import org.eng_diary.api.util.S3UploadService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,22 +22,38 @@ public class FileManagerService {
     private final FileMetaJpaRepository fileMetaJpaRepository;
     private final EntityFileRelationJpaRepository entityFileRelationJpaRepository;
 
-    public void saveFileMeta(MultipartFile file) {
+    public void saveFile(MultipartFile file, EntityFileRelation relation) {
+        if (file == null) {
+            return;
+        }
+
         String originalFileName = file.getOriginalFilename();
         String extension = "";
 
         if (originalFileName != null && originalFileName.contains(".")) {
-            extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
         }
 
-        String uniqueFileName = "dbgd-" +UUID.randomUUID() + extension;
+        String originalFileNameWithoutExt = originalFileName.replace("." + extension, "");
+        String uniqueFileName = "dbgd-" +UUID.randomUUID();
         long fileSize =  file.getSize();
+
+        FileMeta fileMeta = FileMeta.builder()
+                .uploadName(uniqueFileName)
+                .originalName(originalFileNameWithoutExt)
+                .ext(extension)
+                .size(fileSize)
+                .entityFileRelation(relation)
+                .build();
+
+        fileMetaJpaRepository.save(fileMeta);
+        s3UploadService.saveFile(file, uniqueFileName);
     }
 
     public List<FileMetaResponse> getFileMetaList(EntityFileRelation entityFileRelation) {
 
         if (entityFileRelation == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<FileMeta> fileMetaList = fileMetaJpaRepository.findByEntityFileRelation(entityFileRelation);

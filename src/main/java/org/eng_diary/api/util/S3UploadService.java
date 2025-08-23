@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,20 +25,27 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String saveFile(MultipartFile multipartFile, String uniqueFileName) throws IOException {
+    public String saveFile(MultipartFile multipartFile, String uniqueFileName) {
         if (multipartFile.getSize() > MAX_FILE_SIZE) {
-            throw new IOException("The file size exceeds the maximum limit of 10MB.");
+            throw new RuntimeException("The file size exceeds the maximum limit of 10MB.");
         }
 
         if (!ALLOWED_CONTENT_TYPES.contains(multipartFile.getContentType())) {
-            throw new IOException("File type not supported. Only JPEG, PNG, and GIF are allowed.");
+            throw new RuntimeException("File type not supported. Only JPEG, PNG, and GIF are allowed.");
         }
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(bucket, uniqueFileName, multipartFile.getInputStream(), metadata);
+        InputStream inputStream;
+        try {
+            inputStream = multipartFile.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        amazonS3.putObject(bucket, uniqueFileName, inputStream, metadata);
         return amazonS3.getUrl(bucket, uniqueFileName).toString();
     }
 
