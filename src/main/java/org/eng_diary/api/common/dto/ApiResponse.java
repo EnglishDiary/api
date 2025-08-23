@@ -3,6 +3,7 @@ package org.eng_diary.api.common.dto;
 import lombok.Getter;
 import org.eng_diary.api.util.PageInfo;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

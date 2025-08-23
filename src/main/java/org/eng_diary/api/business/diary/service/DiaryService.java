@@ -12,6 +12,14 @@ import org.eng_diary.api.business.diary.repository.DiaryRepository;
 import org.eng_diary.api.business.diary.entity.Diary;
 import org.eng_diary.api.business.auth.entity.Member;
 import org.eng_diary.api.business.diary.entity.OfficialDiaryCategory;
+import org.eng_diary.api.business.filemanage.dao.EntityFileRelationJpaRepository;
+import org.eng_diary.api.business.filemanage.dto.response.FileMetaResponse;
+import org.eng_diary.api.business.filemanage.entity.EntityFileRelation;
+import org.eng_diary.api.business.filemanage.service.FileManagerService;
+import org.eng_diary.api.business.member.repository.MemberJpaRepository;
+import org.eng_diary.api.business.member.repository.MemberRepository;
+import org.eng_diary.api.common.context.UserContext;
+import org.eng_diary.api.common.context.UserContextHolder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +50,11 @@ public class DiaryService {
     private Integer maxTokens;
 
     private final RestTemplate restTemplate;
-
     private final DiaryRepository diaryRepository;
+    private final FileManagerService fileManagerService;
+    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final EntityFileRelationJpaRepository entityFileRelationJpaRepository;
 
     @Transactional
     public Map<String, String> requestAICorrection(String userDiary) {
@@ -127,11 +139,10 @@ public class DiaryService {
     }
 
     @Transactional
-    public void saveDiary(DiarySaveRequest diarySaveRequest) {
-
-        // TODO 240906 멤버 하드코딩 제거
-        Member member = new Member();
-//        member.setId(1L);
+    public void saveDiary(DiarySaveRequest diarySaveRequest, MultipartFile file) {
+        UserContext userContext = UserContextHolder.getUserContext();
+        Member member = memberJpaRepository.findById(userContext.memberId())
+                .orElseThrow(() -> new RuntimeException("not existed member"));
 
         // TODO 240906 프론트에서 카테고리 id 받은 거 db에 select 한 번 날려보긴 해야 함
         OfficialDiaryCategory officialDiaryCategory = new OfficialDiaryCategory();
@@ -141,6 +152,10 @@ public class DiaryService {
             diarySaveRequest.setRevisionPublic(false);
             diarySaveRequest.setFeedbackPublic(false);
         }
+
+        EntityFileRelation entityFileRelation = new EntityFileRelation();
+        entityFileRelation.setEntityName("diary");
+        entityFileRelationJpaRepository.save(entityFileRelation);
 
         Diary diary = Diary.builder()
                 .title(diarySaveRequest.getTitle())
@@ -152,8 +167,10 @@ public class DiaryService {
                 .isFeedbackPublic(diarySaveRequest.isFeedbackPublic())
                 .member(member)
                 .officialDiaryCategory(officialDiaryCategory)
+                .entityFileRelation(entityFileRelation)
                 .build();
 
+        fileManagerService.saveFile(file, entityFileRelation);
         diaryRepository.saveDiary(diary);
     }
 
@@ -168,18 +185,23 @@ public class DiaryService {
         }
 
         return diaries.stream().map((diary) -> {
+            EntityFileRelation entityFileRelation = diary.getEntityFileRelation();
+            List<FileMetaResponse> fileMetaList = fileManagerService.getFileMetaList(entityFileRelation);
+
             DiaryDTO dto = new DiaryDTO();
             dto.setId(diary.getId());
             dto.setTitle(diary.getTitle());
             dto.setContent(diary.getContent());
             dto.setRegisterTime(diary.getCreatedAt());
             dto.setMemberName(diary.getMember().getNickname());
-
-            // TODO 240906 하드코딩 내용들 구현 필요
-            dto.setMemberProfileUrl("https://assets.pokemon.com/assets/cms2/img/pokedex/full//001.png");
-            dto.setThumbnailUrl("https://occ-0-8407-2219.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeNzg-kMHhUBP4AmHnLsrPYzxKHVceLnkwtLhxZlDssj7KjhStloJR6px7EbquZ83uDcygnWkekxysvuNYVzLQ3GyBMRl2PpU7pO.jpg?r=db8");
+            dto.setMemberProfileUrl(diary.getMember().getProfileUrl());
             dto.setLikes(0);
             dto.setComments(0);
+            if (!fileMetaList.isEmpty()) {
+                FileMetaResponse thumbnailInfo = fileMetaList.getFirst();
+                dto.setThumbnailUrl("https://emusonbucket.s3.ap-northeast-2.amazonaws.com/" + thumbnailInfo.getUploadName());
+            }
+
             return dto;
         }).collect(Collectors.toList());
     }
@@ -207,6 +229,11 @@ public class DiaryService {
         dto.setLikes(0);
         dto.setMemberProfileUrl("");
         dto.setThumbnailUrl("");
+
+        // file data
+        EntityFileRelation entityFileRelation = diary.getEntityFileRelation();
+        List<FileMetaResponse> fileMetaList = fileManagerService.getFileMetaList(entityFileRelation);
+        dto.setFiles(fileMetaList);
 
         return dto;
     }

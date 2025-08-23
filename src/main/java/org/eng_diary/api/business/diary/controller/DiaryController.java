@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.eng_diary.api.business.diary.dto.*;
 import org.eng_diary.api.business.diary.service.DiaryService;
 import org.eng_diary.api.common.dto.ApiResponse;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -29,9 +31,11 @@ public class DiaryController {
         return ApiResponse.success(diaryService.requestAICorrection(diary));
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<ApiResponse<?>> saveDiary(@RequestBody DiarySaveRequest diarySaveRequest) {
-        diaryService.saveDiary(diarySaveRequest);
+    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<?>> saveDiary(
+            @RequestPart("jsonData") DiarySaveRequest diarySaveRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        diaryService.saveDiary(diarySaveRequest, file);
         return ApiResponse.success("다이어리 업로드 성공");
     }
 
@@ -44,5 +48,10 @@ public class DiaryController {
     public ResponseEntity<ApiResponse<DiaryDetailDTO>> getDiaryDetail(@PathVariable("diaryId") Long diaryId) {
         return ApiResponse.success(diaryService.getDiaryDetail(diaryId));
     }
+
+//    @GetMapping("/{diaryId}/detail")
+//    public ResponseEntity<DiaryDetailDTO> getDiaryDetail(@PathVariable("diaryId") Long diaryId) {
+//        return ResponseEntity.ok(diaryService.getDiaryDetail(diaryId));
+//    }
 
 }
