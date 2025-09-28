@@ -34,6 +34,15 @@ public class StudyMapper {
                 .id(chapter.getId())
                 .name(chapter.getName())
                 .desc(chapter.getDesc())
+                .bookmarkIndex(chapter.getBookmarkIndex())
+                .build();
+    }
+
+    public static ChapterRes createChapterWithScriptRes(Chapter chapter) {
+        return ChapterRes.builder()
+                .id(chapter.getId())
+                .name(chapter.getName())
+                .desc(chapter.getDesc())
                 .scriptId(Optional.ofNullable(chapter.getScript())
                         .map(Script::getId)
                         .orElse(null))

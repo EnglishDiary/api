@@ -26,7 +26,7 @@ public class Chapter {
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "script_id")
     private Script script;
 

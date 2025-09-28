@@ -29,11 +29,17 @@ public class StudyQueryRepository {
                 .fetch();
     }
 
-    public List<Chapter> findChapters(Long topicId) {
+    public List<Chapter> findChaptersByTopic(Long topicId) {
         return queryFactory.selectFrom(chapter)
                 .where(chapter.topic.id.eq(topicId))
                 .fetch();
     }
+
+    public List<Chapter> findAllChapters() {
+        return queryFactory.selectFrom(chapter)
+                .fetch();
+    }
+
 
     public Script findScript(Long scriptId) {
         return queryFactory.selectFrom(script)

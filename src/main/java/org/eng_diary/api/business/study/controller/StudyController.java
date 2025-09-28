@@ -34,13 +34,18 @@ public class StudyController {
         return ApiResponse.success(studyService.getTopics());
     }
 
+    @GetMapping("/chapters")
+    public ResponseEntity<ApiResponse<List<ChapterRes>>> getAllChapters() {
+        return ApiResponse.success(studyService.getAllChapters());
+    }
+
     @PostMapping("/topic")
     public ResponseEntity<ApiResponse<TopicRes>> saveTopic(@RequestBody TopicSaveForm topicSaveForm) {
         return ApiResponse.success(studyService.saveTopic(topicSaveForm));
     }
 
     @GetMapping("/topic/{topicId}/chapters")
-    public ResponseEntity<ApiResponse<List<ChapterRes>>> getChapters(@PathVariable(name = "topicId") Long topicId) {
+    public ResponseEntity<ApiResponse<List<ChapterRes>>> getAllChapters(@PathVariable(name = "topicId") Long topicId) {
         return ApiResponse.success(studyService.getChapters(topicId));
     }
 

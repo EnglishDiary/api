@@ -72,7 +72,15 @@ public class StudyService {
     }
 
     public List<ChapterRes> getChapters(Long topicId) {
-        List<Chapter> chapters = studyQueryRepository.findChapters(topicId);
+        List<Chapter> chapters = studyQueryRepository.findChaptersByTopic(topicId);
+
+        return chapters.stream()
+                .map(StudyMapper::createChapterWithScriptRes)
+                .toList();
+    }
+
+    public List<ChapterRes> getAllChapters() {
+        List<Chapter> chapters = chapterRepository.findAll();
 
         return chapters.stream()
                 .map(StudyMapper::createChapterRes)
@@ -87,7 +95,7 @@ public class StudyService {
         Chapter chapter = StudyMapper.createChapter(chapterSaveForm, topic);
         chapterRepository.save(chapter);
 
-        return StudyMapper.createChapterRes(chapter);
+        return StudyMapper.createChapterWithScriptRes(chapter);
     }
 
     public ScriptRes getScript(Long scriptId) {
@@ -119,6 +127,6 @@ public class StudyService {
         Chapter chapter = chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new RuntimeException("not existed chapter"));
 
-        return StudyMapper.createChapterRes(chapter);
+        return StudyMapper.createChapterWithScriptRes(chapter);
     }
 }
